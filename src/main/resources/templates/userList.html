@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml" lang="zh-CN">
+<head>
+    <meta charset="UTF-8"/>
+    <title>用户列表</title>
+</head>
+<body>
+    <div>
+        <table>
+            <legend>
+                <strong>用户列表</strong>
+            </legend>
+            <thead>
+                <tr>
+                    <th>用户编号</th>
+                    <th>姓名</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="user : ${users}">
+                    <td th:text="${user.id}"></td>
+                    <td th:text="${user.name}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
