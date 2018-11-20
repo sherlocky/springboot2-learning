@@ -9,6 +9,8 @@ import reactor.core.publisher.Mono;
 
 /**
  * 购买自<a href="https://gitbook.cn/gitchat/column/5acda6f6d7966c5ae1086f2b#catalog">【李强强 ·Spring Boot WebFlux 上手教程】</a>
+ * <a href="https://github.com/JeffLi1993/springboot-learning-example">github地址</a>
+ * <a href="https://gitee.com/jeff1993/springboot-learning-example">gitee地址</a>
  *
  * <h1>响应式 API</h1>
  * Reactor 框架是 Spring Boot Webflux 响应库依赖，通过 Reactive Streams 并与其他响应库交互。提供了 两种响应式 API : Mono 和 Flux。一般是将 Publisher 作为输入，在框架内部转换成 Reactor 类型并处理逻辑，然后返回 Flux 或 Mono 作为输出。
