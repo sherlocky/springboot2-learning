@@ -3,7 +3,6 @@ package com.sherlocky.springboot2.web.flux.handler;
 import com.sherlocky.springboot2.dao.UserRepository;
 import com.sherlocky.springboot2.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -51,7 +50,8 @@ public class UserHandler {
 
     // 通过id查找
     public Mono<User> findUserById(Long id) {
-        return Mono.justOrEmpty(userRepository.findUserById(id)).switchIfEmpty(Mono.error(new ResourceNotFoundException()));
+        return Mono.justOrEmpty(userRepository.findUserById(id));
+        //.switchIfEmpty(Mono.error(new ResourceNotFoundException()));
     }
 
     public Flux<User> listUsers() {
