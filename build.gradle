@@ -1,15 +1,16 @@
 buildscript {
-	ext {
-		springBootVersion = '2.1.0.RELEASE'
-	}
-	repositories {
-		maven {
-			url maven_url
-		}
-	}
-	dependencies {
-		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-	}
+    ext {
+        springBootVersion = '2.1.0.RELEASE'
+    }
+    // gradle 脚本自身需要使用的资源
+    repositories {
+        maven {
+            url maven_url
+        }
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
 }
 
 apply plugin: 'java'
@@ -19,20 +20,51 @@ apply plugin: 'io.spring.dependency-management'
 
 group = 'com.sherlocky'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = 1.8
 
+[compileJava, compileTestJava, javadoc]*.options*.encoding = 'utf-8'
+
+//设置jdk的版本
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+/**
+// 生成启动脚本并打包
+def appMainClass = 'com.sherlocky.job.Application'
+apply plugin: 'application'
+mainClassName = appMainClass
+*/
+
+// 项目自身需要的资源
 repositories {
-	maven {
-		url maven_url
-	}
+    maven {
+        url maven_url
+    }
 }
 
 
 dependencies {
-	implementation('org.springframework.boot:spring-boot-starter')
-	implementation('org.springframework.boot:spring-boot-starter-web')
-	implementation('org.springframework.boot:spring-boot-starter-webflux')
-	runtimeOnly('mysql:mysql-connector-java')
-	testImplementation('org.springframework.boot:spring-boot-starter-test')
-	testImplementation('io.projectreactor:reactor-test')
+    // compile gradle 3.0+ 已被标为过时方法，而新增了两个依赖指令，一个是implement 和api，这两个都可以进行依赖添加
+    // api 指令: 完全等同于compile指令，没区别，你将所有的compile改成api，完全没问题
+    // 使用 implementation 依赖配置，会显著提升构建时间（封箱策略）
+    // 如果你是一个lib库的维护者，对于所有需要公开的 API 你应该使用 api 依赖配置，测试依赖或不让最终用户使用的依赖使用 implementation 依赖配置
+
+    //implementation('org.springframework.boot:spring-boot-starter')
+    //implementation('org.springframework.boot:spring-boot-starter-web')
+    implementation('org.springframework.boot:spring-boot-starter-webflux') {
+        exclude module: 'spring-boot-starter-tomcat', group: 'org.springframework.boot'
+    }
+    // 使用 undertow 代替 tomcat
+    implementation('org.springframework.boot:spring-boot-starter-undertow')
+    implementation('org.springframework.boot:spring-boot-starter-data-rest') {
+        exclude module: 'spring-boot-starter-tomcat', group: 'org.springframework.boot'
+    }
+    // 模板引擎 Thymeleaf
+    implementation('org.springframework.boot:spring-boot-starter-thymeleaf')
+
+    runtimeOnly('mysql:mysql-connector-java')
+
+    testImplementation('org.springframework.boot:spring-boot-starter-test')
+    testImplementation('io.projectreactor:reactor-test')
 }
+// 对于 springboot 的 gradle 项目，可以直接运行 bootJar 打可执行jar包
+// 再结合 plugin: 'application'，运行 bootDistTar 或者 bootDistZip 可以打包成带执行脚本的包
