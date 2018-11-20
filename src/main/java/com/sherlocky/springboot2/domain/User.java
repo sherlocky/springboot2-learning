@@ -1,4 +1,4 @@
-package com.sherlocky.springboot2.web.entity;
+package com.sherlocky.springboot2.domain;
 
 /**
  * @author: zhangcx

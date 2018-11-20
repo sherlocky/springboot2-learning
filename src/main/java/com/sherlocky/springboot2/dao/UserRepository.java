@@ -1,6 +1,6 @@
-package com.sherlocky.springboot2.web.flux;
+package com.sherlocky.springboot2.dao;
 
-import com.sherlocky.springboot2.web.entity.User;
+import com.sherlocky.springboot2.domain.User;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
@@ -24,23 +24,23 @@ public class UserRepository {
     private static final AtomicLong idGenerator = new AtomicLong(0);
 
     public Long save(User user) {
-        Long id = idGenerator.incrementAndGet();
-        user.setId(id);
-        repository.put(id, user);
-        return id;
+        if (user.getId() == null) {
+            user.setId(idGenerator.incrementAndGet());
+        }
+        repository.put(user.getId(), user);
+        return user.getId();
     }
 
     public Collection<User> findAll() {
         return repository.values();
     }
 
-
     public User findUserById(Long id) {
         return repository.get(id);
     }
 
-    public Long updateUser(User user) {
-        repository.put(user.getId(), user);
+    public Long updateUser(Long userId, User user) {
+        repository.put(userId, user);
         return user.getId();
     }
 

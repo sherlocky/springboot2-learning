@@ -1,14 +1,15 @@
-package com.sherlocky.springboot2.web.flux.annotation;
+package com.sherlocky.springboot2.web.flux.controller;
 
-import com.sherlocky.springboot2.web.entity.User;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.sherlocky.springboot2.domain.User;
+import com.sherlocky.springboot2.web.flux.handler.UserHandler;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 /**
+ * 购买自<a href="https://gitbook.cn/gitchat/column/5acda6f6d7966c5ae1086f2b#catalog">【李强强 ·Spring Boot WebFlux 上手教程】</a>
+ *
  * <h1>响应式 API</h1>
  * Reactor 框架是 Spring Boot Webflux 响应库依赖，通过 Reactive Streams 并与其他响应库交互。提供了 两种响应式 API : Mono 和 Flux。一般是将 Publisher 作为输入，在框架内部转换成 Reactor 类型并处理逻辑，然后返回 Flux 或 Mono 作为输出。
  *
@@ -39,14 +40,32 @@ import reactor.core.publisher.Mono;
 @RestController
 @RequestMapping("/flux/annotation/users")
 public class MyAnnotationFluxController {
+    @Autowired
+    private UserHandler userHandler;
 
-    @GetMapping("")
+    /** 使用 WebFlux 实现 Restful 接口 */
+    @GetMapping()
     public Flux<User> listUsers() {
-        return null;
+        return userHandler.listUsers();
     }
 
     @GetMapping("/{userId}")
     public Mono<User> getUser(@PathVariable Long userId) {
-        return null;
+        return userHandler.findUserById(userId);
+    }
+
+    @PostMapping
+    public Mono<Long> createUser(@RequestBody User user) {
+        return userHandler.createUser(user);
+    }
+
+    @PutMapping("/{userId}")
+    public Mono<Long> updateUser(@PathVariable Long userId, @RequestBody User user) {
+        return userHandler.updateUser(userId, user);
+    }
+
+    @DeleteMapping(value = "/{userId}")
+    public Mono<Long> deleteUser(@PathVariable Long userId) {
+        return userHandler.deleteUser(userId);
     }
 }
