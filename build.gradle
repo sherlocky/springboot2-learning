@@ -50,11 +50,13 @@ dependencies {
 
     //implementation('org.springframework.boot:spring-boot-starter')
     //implementation('org.springframework.boot:spring-boot-starter-web')
+    // webflux 默认使用 reactor-netty
     implementation('org.springframework.boot:spring-boot-starter-webflux') {
         exclude module: 'spring-boot-starter-tomcat', group: 'org.springframework.boot'
     }
     // 使用 undertow 代替 tomcat
-    implementation('org.springframework.boot:spring-boot-starter-undertow')
+    // implementation('org.springframework.boot:spring-boot-starter-undertow')
+
     implementation('org.springframework.boot:spring-boot-starter-data-rest') {
         exclude module: 'spring-boot-starter-tomcat', group: 'org.springframework.boot'
     }

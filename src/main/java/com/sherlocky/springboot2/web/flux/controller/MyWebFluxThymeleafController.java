@@ -53,7 +53,7 @@ public class MyWebFluxThymeleafController {
          * org.springframework.expression.spel.SpelEvaluationException: EL1008E: Property or field 'id' cannot be found on object of
          * type 'reactor.core.publisher.FluxIterable' - maybe not public or not valid?
          */
-        // tomcat9 和 undertow2 均报同样的错
+        // tomcat9 和 undertow2 均报同样的错，在netty4下可以正常返回页面（springboot 2.1.0 webflux默认容器就是netty4）
         model.addAttribute("users", userFluxList);
         // return 字符串，该字符串对应的目录在 resources/templates 下的模板名字
         // 一般会集中用常量管理模板视图的路径
