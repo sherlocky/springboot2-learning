@@ -5,51 +5,66 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.*;
 
-import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
- * @description webSocket处理类
+ * webSocket处理类
  */
 @Component
 public class MyWebSocketHandler implements WebSocketHandler {
-
     private static final Logger logger = LoggerFactory.getLogger(MyWebSocketHandler.class);
+    /**
+     * concurrent包的线程安全Set，暂存客户端用户信息
+     */
+    private static final CopyOnWriteArraySet<WebSocketSession> webSocketClientUsers = new CopyOnWriteArraySet<>();
+    /*
+     * 静态变量，用来模拟用户id，从0开始，每个新客户端累加1
+     */
+    private static AtomicLong userId = new AtomicLong(0);
 
-    // TODO 暂存用户信息
-    private static final ArrayList<WebSocketSession> users;
-
-    static {
-        users = new ArrayList<>();
-    }
-
-    @Override
-    public void afterConnectionEstablished(WebSocketSession webSocketSession) throws Exception {
-        logger.info("### 系统WebSocket连接已建立！");
-        //此处可添加客户端接收用户
-        logger.info(webSocketSession.getAttributes().get("WEBSOCKET_USERID").toString());
-        users.add(webSocketSession);
+    // 获取一个新的客户端用户id
+    public static Long createWebSocketClientUserId() {
+        return userId.incrementAndGet();
     }
 
     /**
      * 给指定用户发送信息
      *
-     * @param webSocketSession
-     * @param webSocketMessage
-     * @throws Exception
+     * @param webSocketSession websocket session 信息
+     * @param webSocketMessage 消息
      */
     @Override
-    public void handleMessage(WebSocketSession webSocketSession, WebSocketMessage<?> webSocketMessage) throws Exception {
+    public void handleMessage(WebSocketSession webSocketSession, WebSocketMessage<?> webSocketMessage) {
         //获取指定用户ID
         Long userId = (Long) webSocketSession.getAttributes().get("WEBSOCKET_USERID");
         String message;
         logger.info("### 处理推送的消息");
         //判断客户端是否消息发送，不需要客户端与客户端的单向通信，此处可省略。
-        if (!webSocketMessage.getPayload().equals("undefined")) {
+        if (!"undefined".equals(webSocketMessage.getPayload())) {
             message = "client 发送的消息为：" + webSocketMessage.getPayload();
         } else {
             message = "推送测试信息 ---" + System.currentTimeMillis();
         }
         sendMessageToUser(userId, new TextMessage(message));
+    }
+
+    @Override
+    public void afterConnectionEstablished(WebSocketSession webSocketSession) {
+        logger.info("### 系统WebSocket连接已建立！");
+        //此处可添加客户端接收用户
+        logger.info("### 当前客户端用户id： " + webSocketSession.getAttributes().get("WEBSOCKET_USERID").toString());
+        webSocketClientUsers.add(webSocketSession);
+    }
+
+    @Override
+    public void afterConnectionClosed(WebSocketSession webSocketSession, CloseStatus closeStatus) {
+        logger.info("### 系统WebSocket连接已断开！");
+    }
+
+    @Override
+    public boolean supportsPartialMessages() {
+        return false;
     }
 
     @Override
@@ -59,26 +74,7 @@ public class MyWebSocketHandler implements WebSocketHandler {
         }
         logger.error("$$$ 系统WebSocket传输错误，连接关闭！用户ID：" + webSocketSession.getAttributes().get("WEBSOCKET_USERID"), throwable);
         //移除异常用户信息
-        users.remove(webSocketSession);
-    }
-
-    @Override
-    public void afterConnectionClosed(WebSocketSession webSocketSession, CloseStatus closeStatus) throws Exception {
-        logger.info("### 系统WebSocket连接已断开！");
-    }
-
-    @Override
-    public boolean supportsPartialMessages() {
-        return false;
-    }
-
-    public void sendMessageToUser(Long userId, TextMessage message) {
-        logger.info("### 发送消息至用户！");
-        for (WebSocketSession user : users) {
-            if (user.getAttributes().get("WEBSOCKET_USERID").equals(userId)) {
-                sendSocketSessionMsg(user, message);
-            }
-        }
+        webSocketClientUsers.remove(webSocketSession);
     }
 
     /**
@@ -92,7 +88,7 @@ public class MyWebSocketHandler implements WebSocketHandler {
         boolean sendSuccess = true;
         try {
             if (user.isOpen()) {
-                synchronized (user) {
+                synchronized (this) {
                     user.sendMessage(message);
                 }
             } else {
@@ -104,5 +100,14 @@ public class MyWebSocketHandler implements WebSocketHandler {
             sendSuccess = false;
         }
         return sendSuccess;
+    }
+
+    public void sendMessageToUser(Long userId, TextMessage message) {
+        logger.info("### 发送消息至用户！");
+        for (WebSocketSession user : webSocketClientUsers) {
+            if (user.getAttributes().get("WEBSOCKET_USERID").equals(userId)) {
+                sendSocketSessionMsg(user, message);
+            }
+        }
     }
 }
