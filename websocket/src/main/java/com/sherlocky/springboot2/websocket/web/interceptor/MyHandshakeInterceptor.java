@@ -1,5 +1,7 @@
 package com.sherlocky.springboot2.websocket.web.interceptor;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.stereotype.Component;
@@ -13,18 +15,18 @@ import java.util.Map;
  */
 @Component
 public class MyHandshakeInterceptor extends HttpSessionHandshakeInterceptor {
+    private static Log log = LogFactory.getLog(HttpSessionHandshakeInterceptor.class);
 
     @Override
-    public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler,
-                                   Map<String, Object> attributes) throws Exception {
+    public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler,Map<String, Object> attributes) throws Exception {
         // 此处可将用户信息放入WebSocketSession的属性当中，以便定向发送消息。
         attributes.put("WEBSOCKET_USERID", 1L);
         return true;
     }
 
     @Override
-    public void afterHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler,
-                               Exception ex) {
+    public void afterHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler, Exception ex) {
+        log.info("### 通过 MyHandshakeInterceptor 的 afterHandshake 拦截器！");
         super.afterHandshake(request, response, wsHandler, ex);
     }
 }
