@@ -29,7 +29,7 @@ public class MyWebSocketController {
 
     @RequestMapping("/login/{userId}")
     @ResponseBody
-    public Map<String, Object> login(@PathVariable Long userId, HttpServletRequest request) throws Exception {
+    public Map<String, Object> login(@PathVariable Long userId, HttpServletRequest request) {
         log.info("############# " + userId + " 登录了 WebSocket。");
         HttpSession session = request.getSession(true);
         session.setAttribute("SESSION_WEBSOCKET_USERID", userId);
@@ -51,7 +51,7 @@ public class MyWebSocketController {
     @ResponseBody
     public String send(@PathVariable Long userId) {
         log.info("############# 给 " + userId + " 发送消息。");
-        webSocketHandler().sendMessageToUser(userId, new TextMessage("你好，测试！！！！"));
-        return "给用户发送消息成功！";
+        webSocketHandler().sendMessageToUser(userId, new TextMessage("你好，" + userId + ",这是一条测试消息~~~~"));
+        return "给用户 " + userId + " 发送消息成功！";
     }
 }
