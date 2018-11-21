@@ -6,14 +6,14 @@ import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.atomic.AtomicLong;
 
 @ServerEndpoint(value = "/javax/websocket")
 @Component
 public class JavaxWebSocketHandler {
 
     // 静态变量，用来记录当前在线连接数。应该把它设计成线程安全的。
-    private static int onlineCount = 0;
-
+    private static AtomicLong onlineCount = new AtomicLong(0);
     // concurrent包的线程安全Set，用来存放每个客户端对应的MyWebSocket对象。
     private static CopyOnWriteArraySet<JavaxWebSocketHandler> webSocketSet = new CopyOnWriteArraySet<JavaxWebSocketHandler>();
 
@@ -33,16 +33,16 @@ public class JavaxWebSocketHandler {
         }
     }
 
-    public static synchronized int getOnlineCount() {
-        return onlineCount;
+    public static synchronized long getOnlineCount() {
+        return onlineCount.get();
     }
 
     public static synchronized void addOnlineCount() {
-        JavaxWebSocketHandler.onlineCount++;
+        onlineCount.incrementAndGet();
     }
 
     public static synchronized void subOnlineCount() {
-        JavaxWebSocketHandler.onlineCount--;
+        onlineCount.decrementAndGet();
     }
 
     /**
