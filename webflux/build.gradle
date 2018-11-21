@@ -1,0 +1,8 @@
+dependencies {
+    // Springboot 2.1 webflux 默认使用 reactor-netty
+    implementation('org.springframework.boot:spring-boot-starter-webflux')
+    // 模板引擎 Thymeleaf
+    implementation('org.springframework.boot:spring-boot-starter-thymeleaf')
+
+    testImplementation('io.projectreactor:reactor-test')
+}

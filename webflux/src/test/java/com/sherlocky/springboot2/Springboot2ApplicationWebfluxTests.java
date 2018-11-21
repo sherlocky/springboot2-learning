@@ -7,7 +7,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class Springboot2ApplicationTests {
+public class Springboot2ApplicationWebfluxTests {
 
     @Test
     public void contextLoads() {

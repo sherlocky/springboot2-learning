@@ -13,60 +13,66 @@ buildscript {
     }
 }
 
-apply plugin: 'java'
-apply plugin: 'eclipse'
-apply plugin: 'org.springframework.boot'
-apply plugin: 'io.spring.dependency-management'
+// 所有子Module的通用配置
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'eclipse'
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
 
-group = 'com.sherlocky'
-version = '0.0.1-SNAPSHOT'
+    group = 'com.sherlocky'
+    version = '0.0.1-SNAPSHOT'
 
-[compileJava, compileTestJava, javadoc]*.options*.encoding = 'utf-8'
+    [compileJava, compileTestJava, javadoc]*.options*.encoding = 'utf-8'
 
-//设置jdk的版本
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+    //设置jdk的版本
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
 
-/**
-// 生成启动脚本并打包
-def appMainClass = 'com.sherlocky.job.Application'
-apply plugin: 'application'
-mainClassName = appMainClass
-*/
+    /**
+     // 生成启动脚本并打包
+     def appMainClass = 'com.sherlocky.job.Application'
+     apply plugin: 'application'
+     mainClassName = appMainClass
+     */
 
-// 项目自身需要的资源
-repositories {
-    maven {
-        url maven_url
+    // 项目自身需要的资源
+    repositories {
+        maven {
+            url maven_url
+        }
     }
-}
 
+    dependencies {
+        // compile gradle 3.0+ 已被标为过时方法，而新增了两个依赖指令，一个是implement 和api，这两个都可以进行依赖添加
+        // api 指令: 完全等同于compile指令，没区别，你将所有的compile改成api，完全没问题
+        // 使用 implementation 依赖配置，会显著提升构建时间（封箱策略）
+        // 如果你是一个lib库的维护者，对于所有需要公开的 API 你应该使用 api 依赖配置，测试依赖或不让最终用户使用的依赖使用 implementation 依赖配置
 
-dependencies {
-    // compile gradle 3.0+ 已被标为过时方法，而新增了两个依赖指令，一个是implement 和api，这两个都可以进行依赖添加
-    // api 指令: 完全等同于compile指令，没区别，你将所有的compile改成api，完全没问题
-    // 使用 implementation 依赖配置，会显著提升构建时间（封箱策略）
-    // 如果你是一个lib库的维护者，对于所有需要公开的 API 你应该使用 api 依赖配置，测试依赖或不让最终用户使用的依赖使用 implementation 依赖配置
+        //implementation('org.springframework.boot:spring-boot-starter')
+        //implementation('org.springframework.boot:spring-boot-starter-web')
+        /** 各子module自行配置
+        // Springboot 2.1 webflux 默认使用 reactor-netty
+        implementation('org.springframework.boot:spring-boot-starter-webflux') {
+            // exclude module: 'spring-boot-starter-tomcat', group: 'org.springframework.boot'
+        }
+        // 可以使用 undertow 代替 tomcat
+        // implementation('org.springframework.boot:spring-boot-starter-undertow')
 
-    //implementation('org.springframework.boot:spring-boot-starter')
-    //implementation('org.springframework.boot:spring-boot-starter-web')
-    // webflux 默认使用 reactor-netty
-    implementation('org.springframework.boot:spring-boot-starter-webflux') {
-        exclude module: 'spring-boot-starter-tomcat', group: 'org.springframework.boot'
+        implementation('org.springframework.boot:spring-boot-starter-websocket') {
+            // 屏蔽掉tomcat，使用 netty容器
+            // exclude module: 'spring-boot-starter-tomcat', group: 'org.springframework.boot'
+        }
+        // 模板引擎 Thymeleaf
+        implementation('org.springframework.boot:spring-boot-starter-thymeleaf')
+
+        runtimeOnly('mysql:mysql-connector-java')
+        // runtime('javax.servlet:javax.servlet-api:3.0.1')
+        */
+
+        testImplementation('org.springframework.boot:spring-boot-starter-test')
+        testCompile group: 'junit', name: 'junit', version: '4.12'
     }
-    // 使用 undertow 代替 tomcat
-    // implementation('org.springframework.boot:spring-boot-starter-undertow')
-
-    implementation('org.springframework.boot:spring-boot-starter-data-rest') {
-        exclude module: 'spring-boot-starter-tomcat', group: 'org.springframework.boot'
-    }
-    // 模板引擎 Thymeleaf
-    implementation('org.springframework.boot:spring-boot-starter-thymeleaf')
-
-    runtimeOnly('mysql:mysql-connector-java')
-
-    testImplementation('org.springframework.boot:spring-boot-starter-test')
-    testImplementation('io.projectreactor:reactor-test')
 }
 // 对于 springboot 的 gradle 项目，可以直接运行 bootJar 打可执行jar包
 // 再结合 plugin: 'application'，运行 bootDistTar 或者 bootDistZip 可以打包成带执行脚本的包
