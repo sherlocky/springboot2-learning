@@ -24,7 +24,7 @@ public class MyWebSocketHandler implements WebSocketHandler {
 
     @Override
     public void afterConnectionEstablished(WebSocketSession webSocketSession) throws Exception {
-        logger.info("系统WebSocket连接已建立！");
+        logger.info("### 系统WebSocket连接已建立！");
         //此处可添加客户端接收用户
         logger.info(webSocketSession.getAttributes().get("WEBSOCKET_USERID").toString());
         users.add(webSocketSession);
@@ -42,7 +42,7 @@ public class MyWebSocketHandler implements WebSocketHandler {
         //获取指定用户ID
         Long userId = (Long) webSocketSession.getAttributes().get("WEBSOCKET_USERID");
         String message;
-        logger.info("处理推送的消息");
+        logger.info("### 处理推送的消息");
         //判断客户端是否消息发送，不需要客户端与客户端的单向通信，此处可省略。
         if (!webSocketMessage.getPayload().equals("undefined")) {
             message = "client 发送的消息为：" + webSocketMessage.getPayload();
@@ -57,14 +57,14 @@ public class MyWebSocketHandler implements WebSocketHandler {
         if (webSocketSession.isOpen()) {
             webSocketSession.close();
         }
-        logger.error("系统WebSocket传输错误，连接关闭！用户ID：" + webSocketSession.getAttributes().get("WEBSOCKET_USERID"), throwable);
+        logger.error("$$$ 系统WebSocket传输错误，连接关闭！用户ID：" + webSocketSession.getAttributes().get("WEBSOCKET_USERID"), throwable);
         //移除异常用户信息
         users.remove(webSocketSession);
     }
 
     @Override
     public void afterConnectionClosed(WebSocketSession webSocketSession, CloseStatus closeStatus) throws Exception {
-
+        logger.info("### 系统WebSocket连接已断开！");
     }
 
     @Override
@@ -73,7 +73,7 @@ public class MyWebSocketHandler implements WebSocketHandler {
     }
 
     public void sendMessageToUser(Long userId, TextMessage message) {
-        logger.info("发送消息至用户！");
+        logger.info("### 发送消息至用户！");
         for (WebSocketSession user : users) {
             if (user.getAttributes().get("WEBSOCKET_USERID").equals(userId)) {
                 sendSocketSessionMsg(user, message);
