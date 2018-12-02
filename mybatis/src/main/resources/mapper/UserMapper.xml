@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sherlocky.springboot2.mybatis.dao.UserMapper" >
+
+    <resultMap id="BASE_RESULT_MAP" type="com.sherlocky.springboot2.mybatis.model.UserModel" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <!--<result column="birthday" property="birthday" jdbcType="DATE" />-->
+        <result column="password" property="password" jdbcType="VARCHAR" />
+        <result column="phone" property="phone" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <sql id="BASE_TABLE">
+      t_user
+    </sql>
+
+    <sql id="BASE_COLUMN_LIST">
+      id, name, password, phone
+    </sql>
+
+    <insert id="create" parameterType="com.sherlocky.springboot2.mybatis.model.UserModel">
+        INSERT INTO
+        <include refid="BASE_TABLE"/>
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            name, password,
+            <if test="phone != null">
+                phone,
+            </if>
+        </trim>
+        <trim prefix="VALUES(" suffix=")" suffixOverrides=",">
+            #{name, jdbcType=VARCHAR}, #{password, jdbcType=VARCHAR},
+            <if test="phone != null">
+                #{phone, jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="list" resultType="com.sherlocky.springboot2.mybatis.model.UserModel">
+        SELECT
+        <include refid="BASE_COLUMN_LIST"/>
+        FROM
+        <include refid="BASE_TABLE"/>
+    </select>
+
+    <select id="get" resultMap="BASE_RESULT_MAP" parameterType="java.lang.Long">
+        select
+        <include refid="BASE_COLUMN_LIST" />
+        from
+        <include refid="BASE_TABLE"/>
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <delete id="remove" parameterType="java.lang.Long" >
+      delete from
+      <include refid="BASE_TABLE"/>
+      where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <update id="update" parameterType="com.sherlocky.springboot2.mybatis.model.UserModel" >
+        update
+        <include refid="BASE_TABLE"/>
+        <trim prefix="set name = " suffix="" suffixOverrides=",">
+            #{name,jdbcType=VARCHAR},
+            <if test="password != null" >
+                password = #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null" >
+                phone = #{phone,jdbcType=VARCHAR},
+            </if>
+        </trim>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+</mapper>

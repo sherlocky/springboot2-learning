@@ -1,4 +1,5 @@
 rootProject.name = 'springboot2-learning'
 include 'websocket'
 include 'webflux'
+include 'mybatis'
 

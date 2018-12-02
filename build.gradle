@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        springBootVersion = '2.1.0.RELEASE'
+        springBootVersion = '2.1.1.RELEASE'
     }
     // gradle 脚本自身需要使用的资源
     repositories {
@@ -38,9 +38,10 @@ subprojects {
 
     // 项目自身需要的资源
     repositories {
-        maven {
+        mavenCentral()
+/*        maven {
             url maven_url
-        }
+        }*/
     }
 
     dependencies {
@@ -49,7 +50,7 @@ subprojects {
         // 使用 implementation 依赖配置，会显著提升构建时间（封箱策略）
         // 如果你是一个lib库的维护者，对于所有需要公开的 API 你应该使用 api 依赖配置，测试依赖或不让最终用户使用的依赖使用 implementation 依赖配置
 
-        //implementation('org.springframework.boot:spring-boot-starter')
+        implementation('org.springframework.boot:spring-boot-starter')
         //implementation('org.springframework.boot:spring-boot-starter-web')
         /** 各子module自行配置
         // Springboot 2.1 webflux 默认使用 reactor-netty
