@@ -3,4 +3,6 @@ include 'websocket'
 include 'webflux'
 include 'mybatis'
 include 'mybatis-generator'
+include 'starter-demo'
+include 'starter-demo-sample'
 

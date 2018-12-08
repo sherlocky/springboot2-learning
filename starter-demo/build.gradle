@@ -1,0 +1,17 @@
+// 作为 starter，不能以bootJar的形式打包，要屏蔽掉（默认开启）
+bootJar {
+    enabled = false
+}
+
+dependencies {
+    // 增加 SpringBoot 自身的自动配置作为依赖
+    // 其实父配置依赖已经配置了 spring-boot-starter，有了间接依赖，这里可以不需要单独引用
+    implementation('org.springframework.boot:spring-boot-autoconfigure')
+    /**
+     * 还需要配置
+     **/
+    // Gradle 4.6+
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+    // gradle 4.5-
+    // compileOnly "org.springframework.boot:spring-boot-configuration-processor"
+}
