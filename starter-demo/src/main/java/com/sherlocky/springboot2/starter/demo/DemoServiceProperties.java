@@ -4,7 +4,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
  * 自行实现一个类型安全的配置类
- * <p>支持嵌套（子类 public static class {}）</p>
+ * <p>支持嵌套（子类 public static class {}）<a href="https://docs.spring.io/spring-boot/docs/2.1.1.RELEASE/reference/html/configuration-metadata.html#configuration-metadata-annotation-processor">官方文档地址</a></p>
  * <p>可以在字段上使用 @NestedConfigurationProperty 以在常规（非内部）类上实现嵌套</p>
  * @author: zhangcx
  * @date: 2018/12/8 21:51
