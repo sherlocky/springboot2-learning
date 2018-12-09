@@ -9,6 +9,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @author: zhangcx
  * @date: 2018/12/8 21:51
  */
+// IDEA下会报【Spring Boot Configuration Annotation Proessor not found in classpath】，是因为spring boot1.5+ @ConfigurationProperties 取消了 location 注解
 @ConfigurationProperties(prefix="demo")
 public class DemoServiceProperties {
     private  static final String DEFAULT_NAME = "DEMO";
