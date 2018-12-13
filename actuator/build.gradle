@@ -1,0 +1,12 @@
+dependencies {
+    implementation ('org.springframework.boot:spring-boot-starter-web')
+    // actuator 监控
+    implementation ('org.springframework.boot:spring-boot-starter-actuator')
+    // actuator 监控 SSH 支持
+    // 启动后会在控制台打印连接信息
+    implementation ('org.springframework.boot:spring-boot-starter-remote-shell:1.5.18.RELEASE')
+
+    // redis
+    implementation ('org.springframework.boot:spring-boot-starter-data-redis')
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.7'
+}
