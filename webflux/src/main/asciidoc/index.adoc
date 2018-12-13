@@ -1,0 +1,25 @@
+# 用 Spring REST Docs 构建文档
+
+= 获取用户列表
+
+[[example_http_request]]
+== HTTP request
+
+include::../../../build/generated-snippets/list-users/http-request.adoc[]
+
+[[example_http_response]]
+== HTTP response
+
+include::../../../build/generated-snippets/list-users/http-response.adoc[]
+
+= 获取单个用户
+
+[[example_http_request]]
+== HTTP request
+
+include::../../../build/generated-snippets/get-user/http-request.adoc[]
+
+[[example_http_response]]
+== HTTP response
+
+include::../../../build/generated-snippets/get-user/http-response.adoc[]

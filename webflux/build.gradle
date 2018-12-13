@@ -1,3 +1,30 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'org.asciidoctor:asciidoctor-gradle-plugin:1.5.9.2'
+    }
+}
+//@AutoConfigureRestDocs自动生成的文档snippets是Asciidoctor格式的文件，需要使用asciidoctor转换为html格式
+apply plugin: 'org.asciidoctor.convert'
+
+asciidoctor {
+    /**
+    sourceDir = file('build/generated-snippets/list-users')
+    sources {
+        include 'http-request.adoc', 'http-response.adoc', 'request-body.adoc', 'response-body'
+    }*/
+    // 具体文档可以参考：https://docs.spring.io/spring-restdocs/docs/current/reference/html5/
+    // asciidoctor官网：https://asciidoctor.org/docs/asciidoctor-gradle-plugin/
+    sourceDir = file('src/main/asciidoc')
+    sources {
+        include 'index.adoc'
+    }
+    outputDir = file('build/docs')
+}
+
 dependencies {
     // Springboot 2.1 webflux 默认使用 reactor-netty
     implementation('org.springframework.boot:spring-boot-starter-webflux')
@@ -8,4 +35,7 @@ dependencies {
     implementation('org.springframework.boot:spring-boot-starter-web')
 
     testImplementation('io.projectreactor:reactor-test')
+
+    // Spring MVC mock 生成REST doc 必需
+    testImplementation('org.springframework.restdocs:spring-restdocs-mockmvc:2.0.3.RELEASE')
 }
