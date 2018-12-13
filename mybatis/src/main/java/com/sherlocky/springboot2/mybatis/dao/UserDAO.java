@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.*;
 import java.util.List;
 
 /**
- * <p>使用注解形式配置Mappe</p>
+ * <p>使用注解形式配置Mapper</p>
  * 注解的一些解释:
  * <li>@Select 是查询类的注解，所有的查询均使用这个</li>
  * <li>@Result 修饰返回的结果集，关联实体类属性和数据库字段一一对应，如果实体类* 属性和数据库属性名保持一致，就不需要这个属性来修饰。</li>
