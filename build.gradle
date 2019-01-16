@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        springBootVersion = '2.1.1.RELEASE'
+        springBootVersion = '2.1.2.RELEASE'
     }
     // gradle 脚本自身需要使用的资源
     repositories {
