@@ -44,7 +44,12 @@ public class Springboot2RedisApplication {
         // 设置值（key）的序列化采用 StringRedisSerializer
         template.setKeySerializer(new StringRedisSerializer());
 
+        template.setHashValueSerializer(jackson2JsonRedisSerializer);
+        template.setHashKeySerializer(new StringRedisSerializer());
+
         template.afterPropertiesSet();
         return template;
     }
+
+    //＠PostConstruct
 }
