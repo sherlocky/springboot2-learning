@@ -23,7 +23,7 @@ import java.util.stream.IntStream;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class Springboot2RedisApplicationTests {
+public class Springboot2RedisSimpleTests {
     // 添加一个统一的key前缀，测试方便
     private final String KEY_PREFIX = "test:springboot2:";
 
