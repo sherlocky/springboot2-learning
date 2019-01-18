@@ -25,7 +25,7 @@ public class ReactiveWebSocketConfiguration {
      * WebSocketHandlerAdapter 负责将 EchoHandler 处理类适配到 WebFlux 容器中
      */
 
-    @Autowired
+    @Autowired // 此处直接注解在方法上，自动装配 ReactiveWebsocketHandler 到方法
     @Bean
     public HandlerMapping webSocketMapping(final ReactiveWebsocketHandler echoHandler) {
         final Map<String, WebSocketHandler> map = new HashMap<>();
