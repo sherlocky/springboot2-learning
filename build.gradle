@@ -16,7 +16,7 @@ buildscript {
 // 所有子Module的通用配置
 subprojects {
     apply plugin: 'java'
-    apply plugin: 'eclipse'
+    //apply plugin: 'eclipse'
     apply plugin: 'org.springframework.boot'
     apply plugin: 'io.spring.dependency-management'
 
@@ -38,10 +38,10 @@ subprojects {
 
     // 项目自身需要的资源
     repositories {
-        mavenCentral()
-/*        maven {
+        /* mavenCentral() */
+        maven {
             url maven_url
-        }*/
+        }
     }
 
     dependencies {
