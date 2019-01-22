@@ -1,6 +1,6 @@
 package com.sherlocky.springboot2.redis;
 
-import com.sherlocky.springboot2.redis.dao.User;
+import com.sherlocky.springboot2.redis.pojo.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

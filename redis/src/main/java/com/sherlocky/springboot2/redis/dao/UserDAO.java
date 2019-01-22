@@ -1,5 +1,6 @@
 package com.sherlocky.springboot2.redis.dao;
 
+import com.sherlocky.springboot2.redis.pojo.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;

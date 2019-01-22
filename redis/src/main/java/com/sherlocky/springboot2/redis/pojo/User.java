@@ -1,10 +1,13 @@
-package com.sherlocky.springboot2.redis.dao;
+package com.sherlocky.springboot2.redis.pojo;
+
+import java.io.Serializable;
 
 /**
  * @author: zhangcx
  * @date: 2019/1/11 17:08
  */
-public class User {
+public class User implements Serializable {
+    private static final long serialVersionUID = -1431965953143163453L;
     private Long id;
     private String name;
 
