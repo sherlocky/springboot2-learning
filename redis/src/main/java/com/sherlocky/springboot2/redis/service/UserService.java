@@ -36,8 +36,13 @@ public class UserService {
 
     @CachePut(value = "redisCache", key = "'redis:user:'+#id", condition = "#result != 'null'")
     public User updateUserName(Long id, String userName) {
-        // 此处调用 getUserById 方法，该方法缓存注解失效（@Cacheable 也是基于Spring AOP代理的，内部方法直接调用，是不走代理的，故会失效）
+        // 此处调用 getUserById 方法，该方法缓存注解失效（@Cacheable 也是基于Spring AOP代理的，内部方法直接调用（并不存在代理对象的调用），是不走代理的，故会失效）
         // 所以这里还会走到方法内部，将查询到最新数据
+        /**
+         * 如果想使用代理可以这样做：
+         * 1.用两个服务类（Service）相互调用
+         * 2.直接从 Spring IOC 容器中获取代理对象来操作（即获取对应的Service Bean）
+         */
         User u = this.getUserById(id);
         if (u == null) {
             return null;
