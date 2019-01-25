@@ -3,10 +3,9 @@ package com.sherlocky.springboot2.web.mvc;
 import com.sherlocky.springboot2.dao.UserRepository;
 import com.sherlocky.springboot2.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
@@ -48,12 +47,22 @@ public class MyMvcRestController {
     }
 
     /** 使用 SpringMVC 实现 Restful 接口 */
-    @RequestMapping("")
+    /* 还可以指定 consumes 和 produces 两个属性 。
+        consumes : 代表的是限制该方法接收什么类型的请求体（ body),
+        produces : 代表的是限定返回的媒体类型，仅当 request 请求头中的（Accept）类型中包含该指定类型才返回
+     */
+    /*
+      使用@ControllerAdvice 和 ＠ExceptionHandler 注解可以处理异常，
+      @ControllerAdvice ：是用来定义控制器通知的，
+      @ExceptionHandler ： 则是指定异常发生的处理方法
+     */
+    @GetMapping("")
     public List<User> listUsers() {
         return Stream.of(new User(1L), new User(2L), new User(3L)).collect(Collectors.toList());
     }
 
-    @RequestMapping("/{userId}")
+    @GetMapping("/{userId}")
+    @ResponseStatus(HttpStatus.OK)
     public User getUser(@PathVariable Long userId) {
         return new User(userId);
     }
