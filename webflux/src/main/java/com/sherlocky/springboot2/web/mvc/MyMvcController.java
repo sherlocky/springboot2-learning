@@ -14,13 +14,13 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * SpringMVC 方式实现 Controller
+ * SpringMVC 方式实现 Controller （等价于 {@link MyMvcRestController}）
  * @author: zhangcx
  * @date: 2018/11/19 11:13
  */
 @Controller
 @RequestMapping("/mvc/users")
-public class MyMVCController {
+public class MyMvcController {
     private static final String USER_LIST_PATH_NAME = "userList";
     @Autowired
     private UserRepository userRepository;

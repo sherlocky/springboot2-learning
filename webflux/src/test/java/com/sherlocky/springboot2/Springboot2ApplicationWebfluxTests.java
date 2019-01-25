@@ -1,7 +1,7 @@
 package com.sherlocky.springboot2;
 
 import com.sherlocky.springboot2.dao.UserRepository;
-import com.sherlocky.springboot2.web.mvc.MyMVCController;
+import com.sherlocky.springboot2.web.mvc.MyMvcController;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(MyMVCController.class)
+@WebMvcTest(MyMvcController.class)
 @AutoConfigureRestDocs // 会自动在 build\generated-snippets\ 下生成 API 文档
 public class Springboot2ApplicationWebfluxTests {
     //mvc 环境对象
