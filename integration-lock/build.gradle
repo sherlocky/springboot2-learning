@@ -1,0 +1,24 @@
+// Spring Integration 实现分布式锁
+/**
+ * Spring早就提供了分布式锁的实现。早期，分布式锁的相关代码存在于Spring Cloud的子项目Spring Cloud Cluster中，后来被迁到Spring Integration中。
+ *
+ * •Spring Cloud Cluster的GitHub：https://github.com/spring-cloud/spring-cloud-cluster ，里面有些用例，以及基于ETCD、hazelcast的分布式锁实现值得一看。
+ * •Spring Integration的GitHub：https://github.com/spring-projects/spring-integration
+ *
+ * Spring Integration 官方说法，这是一个 企业集成模式 的实现；通俗地说，Spring Integration的定位是一个轻量级的ESB，尽管它做了很多ESB不做的事情。顺便说一下，Spring Cloud Stream的底层也是Spring Integration。
+ *
+ * Spring Integration提供的全局锁目前为如下存储提供了实现（它们使用相同的API抽象）：
+ *
+ * •Gemfire
+ * •JDBC
+ * •Redis
+ * •Zookeeper
+ */
+
+dependencies {
+    implementation('org.springframework.boot:spring-boot-starter-integration')
+    implementation('org.springframework.boot:spring-boot-starter-data-redis')
+    implementation('org.springframework.integration:spring-integration-redis')
+
+    implementation('com.alibaba:fastjson:1.2.47')
+}

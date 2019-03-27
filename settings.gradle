@@ -8,4 +8,5 @@ include 'starter-demo-sample'
 include 'actuator'
 include 'redis'
 include 'aop-logging'
+include 'integration-lock'
 
