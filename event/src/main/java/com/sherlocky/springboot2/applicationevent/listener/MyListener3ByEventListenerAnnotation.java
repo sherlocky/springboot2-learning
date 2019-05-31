@@ -17,7 +17,13 @@ public class MyListener3ByEventListenerAnnotation {
 
     @EventListener
     @Async // 异步监听，需要配合启动类上的@EnableAsync注解一起使用（会使用一个默认的线程池,可自定义线程池替代）
-    public void listener(MyBlogEvent event) {
-        logger.info(String.format("%s监听到事件源：%s.", MyListener3ByEventListenerAnnotation.class.getName(), event.getSource()));
+    public void asyncListener(MyBlogEvent event) {
+        logger.info(String.format("%s【异步】监听到事件源：%s.", MyListener3ByEventListenerAnnotation.class.getName(), event.getSource()));
     }
+
+    @EventListener
+    public void listener(MyBlogEvent event) {
+        logger.info(String.format("%s【同步】监听到事件源：%s.", MyListener3ByEventListenerAnnotation.class.getName(), event.getSource()));
+    }
+
 }
