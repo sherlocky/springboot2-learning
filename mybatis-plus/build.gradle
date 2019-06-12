@@ -1,0 +1,10 @@
+dependencies {
+    // lombok
+    implementation('org.projectlombok:lombok:1.18.8')
+    // mybatis-plus
+    implementation('com.baomidou:mybatis-plus-boot-starter:3.1.1')
+    // alibaba的druid数据库连接池
+    implementation('com.alibaba:druid-spring-boot-starter:1.1.10')
+    implementation('mysql:mysql-connector-java:5.1.47')
+    implementation('com.alibaba:fastjson:1.2.47')
+}
