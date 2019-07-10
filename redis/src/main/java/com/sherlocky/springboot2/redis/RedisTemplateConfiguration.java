@@ -1,5 +1,6 @@
 package com.sherlocky.springboot2.redis;
 
+import com.alibaba.fastjson.support.spring.GenericFastJsonRedisSerializer;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -22,7 +23,7 @@ public class RedisTemplateConfiguration {
     /**
      * 覆盖 SpringBoot reids 默认使用的序列化器（默认的为二进制，对可视化不友好）
      */
-    @Bean
+    //@Bean
     @SuppressWarnings({"rawtypes", "unchecked"})
     public RedisTemplate<Object, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory)
             throws UnknownHostException {
@@ -42,6 +43,31 @@ public class RedisTemplateConfiguration {
         template.setHashValueSerializer(jackson2JsonRedisSerializer);
         template.setHashKeySerializer(new StringRedisSerializer());
 
+        template.afterPropertiesSet();
+        return template;
+    }
+
+    /**
+     * 使用fastjson序列化器
+     * @param redisConnectionFactory
+     * @return
+     */
+    @Bean
+    public RedisTemplate redisTemplateByFastJson(RedisConnectionFactory redisConnectionFactory) throws UnknownHostException {
+        RedisTemplate<Object, Object> template = new RedisTemplate<Object, Object>();
+        template.setConnectionFactory(redisConnectionFactory);
+
+        GenericFastJsonRedisSerializer fastJsonRedisSerializer = new GenericFastJsonRedisSerializer();
+
+        /** 设置默认的Serialize，包含 keySerializer & valueSerializer */
+        template.setDefaultSerializer(fastJsonRedisSerializer);
+        // template.setKeySerializer(fastJsonRedisSerializer); // 单独设置keySerializer
+        // template.setValueSerializer(fastJsonRedisSerializer); // 单独设置valueSerializer
+        /** 设置 hash key 和 value 序列化模式 */
+        template.setHashValueSerializer(fastJsonRedisSerializer);
+        template.setHashKeySerializer(fastJsonRedisSerializer);
+
+        /** 必须执行这个函数,初始化RedisTemplate */
         template.afterPropertiesSet();
         return template;
     }
