@@ -2,7 +2,7 @@
 
 dependencies {
     implementation('org.springframework.boot:spring-boot-starter-aop')
-    implementation('com.alibaba:fastjson:1.2.47')
+    implementation('com.alibaba:fastjson:1.2.58')
 
     implementation('cn.hutool:hutool-all:4.4.2')
 }

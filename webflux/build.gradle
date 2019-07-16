@@ -34,7 +34,7 @@ dependencies {
     // Spring MVC mock 必需
     implementation('org.springframework.boot:spring-boot-starter-web')
 
-    implementation('com.alibaba:fastjson:1.2.47')
+    implementation('com.alibaba:fastjson:1.2.58')
 
     testImplementation('io.projectreactor:reactor-test')
 
