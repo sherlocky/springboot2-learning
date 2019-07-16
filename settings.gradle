@@ -12,4 +12,7 @@ include 'aop-logging'
 include 'integration-lock'
 include 'event'
 include 'war'
+include 'dubbo-producer'
+include 'duboo-consumer'
+include 'dubbo-api'
 

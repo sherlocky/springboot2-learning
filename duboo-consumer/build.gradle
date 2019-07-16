@@ -1,0 +1,19 @@
+dependencies {
+    implementation project(':dubbo-api')
+    implementation 'org.apache.dubbo:dubbo-spring-boot-starter:2.7.1'
+    implementation 'org.apache.dubbo:dubbo:2.7.1'
+    // 使用 nacos 注册中心
+    implementation 'org.apache.dubbo:dubbo-registry-nacos:2.7.1'
+    implementation 'com.alibaba.nacos:nacos-client:0.9.0'
+    // Netflix公司开源的一套Zookeeper客户端框架
+    //implementation 'org.apache.curator:curator-recipes:2.13.0'
+    implementation 'com.alibaba:fastjson:1.2.58'
+    compileOnly 'org.projectlombok:lombok:1.18.8'
+}
+
+configurations {
+    // 在全局配置中排除log4j和slf4j-log4j12依赖，使用 logback
+    compile.exclude group: 'log4j', module: 'log4j'
+    compile.exclude group: 'org.slf4j', module: 'slf4j-log4j12'
+    // all*.exclude
+}
