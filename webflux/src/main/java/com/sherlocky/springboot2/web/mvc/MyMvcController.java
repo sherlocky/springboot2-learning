@@ -5,9 +5,7 @@ import com.sherlocky.springboot2.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -51,9 +49,21 @@ public class MyMvcController {
         return Stream.of(new User(1L), new User(2L), new User(3L)).collect(Collectors.toList());
     }
 
-    @RequestMapping("/{userId}")
+    @RequestMapping(value = "/{userId}")
     @ResponseBody
     public User getUser(@PathVariable Long userId) {
         return new User(userId);
+    }
+
+    @PostMapping("")
+    @ResponseBody
+    public User save(@RequestBody User u) {
+        if (u.getName() != null) {
+            u.setName("new::" + u.getName());
+        } else {
+            u.setName("XXXXXXXXX");
+        }
+        return u;
+        // return new User(Long.parseLong((String) um.get("id")));
     }
 }
