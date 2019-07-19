@@ -2,11 +2,13 @@ dependencies {
     implementation project(':dubbo-api')
     implementation 'org.apache.dubbo:dubbo-spring-boot-starter:2.7.1'
     implementation 'org.apache.dubbo:dubbo:2.7.1'
-    // 使用 nacos 注册中心
-    implementation 'org.apache.dubbo:dubbo-registry-nacos:2.7.1'
-    implementation 'com.alibaba.nacos:nacos-client:0.9.0'
+    /**
+     // 使用 nacos 注册中心
+     implementation 'org.apache.dubbo:dubbo-registry-nacos:2.7.1'
+     implementation 'com.alibaba.nacos:nacos-client:0.9.0'
+     */
     // Netflix公司开源的一套Zookeeper客户端框架
-    //implementation 'org.apache.curator:curator-recipes:2.13.0'
+    implementation 'org.apache.curator:curator-recipes:2.13.0'
     implementation 'com.alibaba:fastjson:1.2.58'
     compileOnly 'org.projectlombok:lombok:1.18.8'
 }
