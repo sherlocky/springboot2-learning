@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- 读取系统环境属性 -->
+    <property name="log_path" value="${LOG_PATH:-./logs}"></property>
+    <!-- 读取当前应用Environment中的属性 -->
+    <!--
+    <springProperty scope="context" name="log_path" source="logging.path" defaultValue="./demo-logs"/>
+    -->
+    <springProperty scope="context" name="app_name" source="spring.application.name" defaultValue="demo"/>
+    <!-- 日志文件保留天数 -->
+    <springProperty scope="context" name="logger_max_history" source="logging.file.max-history" defaultValue="7"/>
+    <!-- 日志文件大小：默认50MB -->
+    <springProperty scope="context" name="max_file_size" source="logging.file.max-size" defaultValue="10MB"/>
+    <contextName>${app_name}</contextName>
+
+    <property name="log_pattern_old" value="#${app_name}# [%d{yyyy-MM-dd HH:mm:ss.SSS}] [%thread] [%-5level] [%logger:%line] --%mdc{client} %msg%n"/>
+    <!-- 可参考：spring-boot.jar!/org/springframework/boot/logging/logback/defaults.xml -->
+	<!-- https://logback.qos.ch/manual/layouts.html#coloring 彩色日志另一种写法，举个例子
+	<pattern>%yellow(%date{yyyy-MM-dd HH:mm:ss}) |%highlight(%-5level)  |%green(%logger:%line) |%black(%msg%n)</pattern>		
+	-->
+    <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter" />
+    <conversionRule conversionWord="wex" converterClass="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter" />
+    <conversionRule conversionWord="wEx" converterClass="org.springframework.boot.logging.logback.ExtendedWhitespaceThrowableProxyConverter" />
+    <property name="log_pattern" value="#${app_name}# %clr([%d{yyyy-MM-dd HH:mm:ss.SSS}]){faint} [%thread] %clr([%-5level]) %clr([%-60.60logger{60}:%-3line]){cyan} --%mdc{client} %msg%n%wEx"/>
+
+    <!-- Log Appender Begin -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!--日志内容格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符-->
+            <!--<pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%thread] [%-5level] %logger{50} - %msg%n</pattern>-->
+            <pattern>${log_pattern}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <springProfile name="prod">
+        <!--输出到文件-->
+        <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+                <fileNamePattern>${log_path}/${app_name}/${app_name}-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+                <maxFileSize>${max_file_size}</maxFileSize>
+                <maxHistory>${logger_max_history}</maxHistory>
+                <totalSizeCap>1GB</totalSizeCap>
+            </rollingPolicy>
+            <encoder>
+                <pattern>${log_pattern}</pattern>
+                <charset>UTF-8</charset>
+            </encoder>
+        </appender>
+    </springProfile>
+
+    <springProfile name="test">
+        <!--输出到文件-->
+        <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+                <fileNamePattern>${log_path}/${app_name}/${app_name}-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+                <maxFileSize>${max_file_size}</maxFileSize>
+                <maxHistory>${logger_max_history}</maxHistory>
+                <totalSizeCap>1GB</totalSizeCap>
+            </rollingPolicy>
+            <encoder>
+                <pattern>${log_pattern}</pattern>
+                <charset>UTF-8</charset>
+            </encoder>
+        </appender>
+    </springProfile>
+
+
+    <springProfile name="prod">
+        <root level="INFO">
+            <appender-ref ref="FILE"/>
+        </root>
+    </springProfile>
+
+    <springProfile name="test">
+        <root level="DEBUG">
+            <appender-ref ref="FILE"/>
+        </root>
+    </springProfile>
+
+    <springProfile name="dev">
+        <root level="DEBUG">
+            <appender-ref ref="STDOUT"/>
+        </root>
+    </springProfile>
+
+</configuration>
