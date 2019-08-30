@@ -285,7 +285,7 @@ public class Springboot2RedisSimpleTests {
     public void testScan() {
         RedisConnection conn = RedisConnectionUtils.getConnection(redisTemplate.getConnectionFactory());
         Jedis jedis = (Jedis) conn.getNativeConnection();
-		// 或者 Jedis jedis = (Jedis) redisTemplate.getConnectionFactory().getConnection().getNativeConnection();
+        // 或者 Jedis jedis = (Jedis) redisTemplate.getConnectionFactory().getConnection().getNativeConnection();
         Set<String> keys = new HashSet<>();
         /**
          * SCAN 命令是一个基于游标的迭代器。
@@ -298,8 +298,10 @@ public class Springboot2RedisSimpleTests {
         ScanParams scanParams = new ScanParams().count(10).match("session:*");
         // 初始游标为0
         int cursor = 0;
-        ScanResult<String> result = null;
-        while ((result = jedis.scan(cursor, scanParams)).getCursor() != 0) {
+        boolean firstScan = true;
+        while (cursor != 0 || firstScan) {
+            firstScan = false;
+            ScanResult<String> result = jedis.scan(cursor, scanParams);
             cursor = result.getCursor();
             // 可能会返回重复的元素，需要手动去重
             keys.addAll(result.getResult());
