@@ -285,6 +285,7 @@ public class Springboot2RedisSimpleTests {
     public void testScan() {
         RedisConnection conn = RedisConnectionUtils.getConnection(redisTemplate.getConnectionFactory());
         Jedis jedis = (Jedis) conn.getNativeConnection();
+		// 或者 Jedis jedis = (Jedis) redisTemplate.getConnectionFactory().getConnection().getNativeConnection();
         Set<String> keys = new HashSet<>();
         /**
          * SCAN 命令是一个基于游标的迭代器。
