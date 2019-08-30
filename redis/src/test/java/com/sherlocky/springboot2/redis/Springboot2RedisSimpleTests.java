@@ -1,15 +1,19 @@
 package com.sherlocky.springboot2.redis;
 
+import com.alibaba.fastjson.JSON;
 import com.sherlocky.springboot2.redis.pojo.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.connection.RedisZSetCommands;
 import org.springframework.data.redis.core.*;
 import org.springframework.test.context.junit4.SpringRunner;
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.ScanParams;
+import redis.clients.jedis.ScanResult;
 
 import javax.annotation.Resource;
 import java.util.HashSet;
@@ -260,8 +264,7 @@ public class Springboot2RedisSimpleTests {
     /**
      * 还可以用lambda 形式实现（IDEA下报一个类型应用的错，但可以运行）
      */
-    /*
-    private void useSessionCallbackByLambda() {
+/*    private void useSessionCallbackByLambda() {
         redisTemplate.execute((SessionCallback) (redisOperations) -> {
             redisOperations.opsForValue().set(KEY_PREFIX + "callback:key2", "value2");
             redisOperations.opsForHash().put(KEY_PREFIX + "callback:hash2", "filed2", "hValue2");
@@ -269,6 +272,39 @@ public class Springboot2RedisSimpleTests {
             System.out.println(redisOperations.opsForHash().entries(KEY_PREFIX + "callback:hash2"));
             return null;
         });
+    }*/
+
+    /**
+     * <p>当数据量达到几百万时，直接使用keys这个指令就会导致 Redis 服务卡顿，因为Redis 是单线程程序，顺序执行所有指令，其它指令必须等到当前的keys指令执行完了才可以继续。</p>
+     *
+     * <p>SCAN命令是增量的循环，每次调用只会返回一小部分的元素。所以不会让redis假死 SCAN命令返回的是一个游标，从0开始遍历，到0结束遍历。</p>
+     *
+     * <p>可参考：https://gblog.sherlocky.com/a-li-yun-rediskai-fa-gui-fan/ 第6节</p>
+     */
+    @Test
+    public void testScan() {
+        RedisConnection conn = RedisConnectionUtils.getConnection(redisTemplate.getConnectionFactory());
+        Jedis jedis = (Jedis) conn.getNativeConnection();
+        Set<String> keys = new HashSet<>();
+        /**
+         * SCAN 命令是一个基于游标的迭代器。
+         * 每次被调用都需要使用上一次这个调用返回的游标作为该次调用的游标参数，以此来延续之前的迭代过程。
+         * 当SCAN命令的游标参数被设置为 0 时， 服务器将开始一次新的迭代，而当服务器向用户返回值为 0 的游标时， 表示迭代已结束。
+         *
+         * 并不保证每次执行都返回某个给定数量的元素,甚至可能会返回0个元素， 但只要命令返回的游标不是 0 ，应用程序就不应该将迭代视作结束。
+         */
+        // 每次取10个,match 匹配是非前缀匹配
+        ScanParams scanParams = new ScanParams().count(10).match("session:*");
+        // 初始游标为0
+        int cursor = 0;
+        ScanResult<String> result = null;
+        while ((result = jedis.scan(cursor, scanParams)).getCursor() != 0) {
+            cursor = result.getCursor();
+            // 可能会返回重复的元素，需要手动去重
+            keys.addAll(result.getResult());
+            System.out.println(String.format("# 游标: %s, 个数: %s", cursor, result.getResult().size()));
+            System.out.println(JSON.toJSONString(result.getResult()));
+        }
+        System.out.println(String.format("总数 = %s", keys.size()));
     }
-    */
 }
