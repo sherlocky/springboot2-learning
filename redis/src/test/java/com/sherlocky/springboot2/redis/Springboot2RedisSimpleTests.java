@@ -87,11 +87,17 @@ public class Springboot2RedisSimpleTests {
     // 获取底层 Jedis 连接
     @Test
     public void testJedisMethods() {
-        Jedis jedis = (Jedis) stringRedisTemplate.getConnectionFactory().getConnection().getNativeConnection();
+        /**
+         * 这种用法有一定风险（不释放连接）
+         * see {@link #testScan()}
+         */
+        RedisConnection rc = stringRedisTemplate.getConnectionFactory().getConnection();
+        Jedis jedis = (Jedis) rc.getNativeConnection();
         jedis.set(KEY_PREFIX + "int1", "0");
         // 减1 操作，这个命令 RedisTemplate 不支持，所以先获取底层的连接再操作
         jedis.decr(KEY_PREFIX + "int1");
         System.out.println(jedis.get(KEY_PREFIX + "int1"));
+
     }
 
     // 可以连续多次操作一个key(本质上还是 Operations，每次执行命令都是重新获取连接)
@@ -283,31 +289,49 @@ public class Springboot2RedisSimpleTests {
      */
     @Test
     public void testScan() {
-        RedisConnection conn = RedisConnectionUtils.getConnection(redisTemplate.getConnectionFactory());
-        Jedis jedis = (Jedis) conn.getNativeConnection();
-        // 或者 Jedis jedis = (Jedis) redisTemplate.getConnectionFactory().getConnection().getNativeConnection();
-        Set<String> keys = new HashSet<>();
         /**
-         * SCAN 命令是一个基于游标的迭代器。
-         * 每次被调用都需要使用上一次这个调用返回的游标作为该次调用的游标参数，以此来延续之前的迭代过程。
-         * 当SCAN命令的游标参数被设置为 0 时， 服务器将开始一次新的迭代，而当服务器向用户返回值为 0 的游标时， 表示迭代已结束。
-         *
-         * 并不保证每次执行都返回某个给定数量的元素,甚至可能会返回0个元素， 但只要命令返回的游标不是 0 ，应用程序就不应该将迭代视作结束。
+         * 【潜在的问题】
+         * redisTemplate.getConnectionFactory().getConnection() 获取 pool 中的 redisConnection 后，并没有后续操作，
+         * 也就是说此时 redis 连接池中的链接被租赁后并没有释放或者退还到链接池中，
+         * 虽然业务已处理完毕 redisConnection 已经空闲，但是 pool 中的 redisConnection 的状态还没有回到 idle 状态
          */
-        // 每次取10个,match 匹配是非前缀匹配
-        ScanParams scanParams = new ScanParams().count(10).match("session:*");
-        // 初始游标为0
-        int cursor = 0;
-        boolean firstScan = true;
-        while (cursor != 0 || firstScan) {
-            firstScan = false;
-            ScanResult<String> result = jedis.scan(cursor, scanParams);
-            cursor = result.getCursor();
-            // 可能会返回重复的元素，需要手动去重
-            keys.addAll(result.getResult());
-            System.out.println(String.format("# 游标: %s, 个数: %s", cursor, result.getResult().size()));
-            System.out.println(JSON.toJSONString(result.getResult()));
-        }
-        System.out.println(String.format("总数 = %s", keys.size()));
+        RedisConnection conn = RedisConnectionUtils.getConnection(redisTemplate.getConnectionFactory());
+        // Jedis jedis = (Jedis) conn.getNativeConnection();
+        // 或者 Jedis jedis = (Jedis) redisTemplate.getConnectionFactory().getConnection().getNativeConnection();
+        // jedis.xxx ...
+
+        /** 解决方法 */
+        // 1.可以 这样手动释放连接
+        RedisConnectionUtils.releaseConnection(conn, redisTemplate.getConnectionFactory());
+
+        // 2.或者 这样使用
+        redisTemplate.execute((RedisCallback) (redisConnection) -> {
+            Jedis jedis = (Jedis) redisConnection.getNativeConnection();
+            // 或者 Jedis jedis = (Jedis) redisTemplate.getConnectionFactory().getConnection().getNativeConnection();
+            Set<String> keys = new HashSet<>();
+            /**
+             * SCAN 命令是一个基于游标的迭代器。
+             * 每次被调用都需要使用上一次这个调用返回的游标作为该次调用的游标参数，以此来延续之前的迭代过程。
+             * 当SCAN命令的游标参数被设置为 0 时， 服务器将开始一次新的迭代，而当服务器向用户返回值为 0 的游标时， 表示迭代已结束。
+             *
+             * 并不保证每次执行都返回某个给定数量的元素,甚至可能会返回0个元素， 但只要命令返回的游标不是 0 ，应用程序就不应该将迭代视作结束。
+             */
+            // 每次取10个,match 匹配是非前缀匹配
+            ScanParams scanParams = new ScanParams().count(10).match("session:*");
+            // 初始游标为0
+            int cursor = 0;
+            boolean firstScan = true;
+            while (cursor != 0 || firstScan) {
+                firstScan = false;
+                ScanResult<String> result = jedis.scan(cursor, scanParams);
+                cursor = result.getCursor();
+                // 可能会返回重复的元素，需要手动去重
+                keys.addAll(result.getResult());
+                System.out.println(String.format("# 游标: %s, 个数: %s", cursor, result.getResult().size()));
+                System.out.println(JSON.toJSONString(result.getResult()));
+            }
+            System.out.println(String.format("总数 = %s", keys.size()));
+           return null;
+        });
     }
 }
