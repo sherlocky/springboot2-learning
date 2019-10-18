@@ -26,6 +26,7 @@
 /.nb-gradle/
 /redis/src/main/resources/application-dev.properties
 /integration-lock/src/main/resources/application-dev.properties
+application-dev.properties
 actuator/out/
 aop-logging/out/
 dubbo-api/out/
