@@ -34,6 +34,7 @@ public class RestShiroFilterFactoryBean extends ShiroFilterFactoryBean {
         }
         FilterChainManager manager = this.createFilterChainManager();
         RestPathMatchingFilterChainResolver chainResolver = new RestPathMatchingFilterChainResolver();
+        // 重写ShiroFilterFactoryBean，使其使用改造后的chainResolver
         chainResolver.setFilterChainManager(manager);
         return new SpringShiroFilter((WebSecurityManager) securityManager, chainResolver);
     }

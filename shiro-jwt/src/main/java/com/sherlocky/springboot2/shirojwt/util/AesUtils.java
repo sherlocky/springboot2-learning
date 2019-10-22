@@ -1,6 +1,7 @@
 package com.sherlocky.springboot2.shirojwt.util;
 
 
+import com.sherlocky.common.util.Md5Utils;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.crypto.Cipher;
@@ -79,12 +80,13 @@ public class AesUtils {
      */
     public static String aesDecode(String content, String decryptKey) {
         try {
-            SecretKeySpec keySpec = new SecretKeySpec(decryptKey.getBytes(StandardCharsets.UTF_8), "AES");
+            byte[] decryptKeyBytes = decryptKey.getBytes(StandardCharsets.UTF_8);
+            SecretKeySpec keySpec = new SecretKeySpec(decryptKeyBytes, "AES");
 
             //根据指定算法AES自成密码器
             Cipher cipher = Cipher.getInstance(ALGORITHM_STR);
             //初始化密码器，第一个参数为加密(Encrypt_mode)或者解密(Decrypt_mode)操作，第二个参数为使用的KEY
-            cipher.init(Cipher.DECRYPT_MODE, keySpec, new IvParameterSpec(decryptKey.getBytes(StandardCharsets.UTF_8)));
+            cipher.init(Cipher.DECRYPT_MODE, keySpec, new IvParameterSpec(decryptKeyBytes));
             //8.将加密并编码base64后的字符串内容base64解码成字节数组
             byte[] bytesContent = Base64.getDecoder().decode(content.getBytes(StandardCharsets.UTF_8));
 
@@ -112,7 +114,7 @@ public class AesUtils {
 
     public static void main(String[] args) {
         String[] keys = {
-                "", "123456", "word"
+                "", "123456", "word", "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
         };
         System.out.println("key | AESEncode | AESDecode");
         for (String key : keys) {
@@ -122,6 +124,10 @@ public class AesUtils {
             String decryptString = aesDecode(encryptString, ENCODE_RULES);
             System.out.println(decryptString);
         }
+        // 1IIW7OBpPiyTFEy3rJzSjA==
+        // admin 656D0DDF01228B0AD0B8D5F9D3CB8842
+
+        System.out.println(Md5Utils.md5("adminsystem"));
     }
 
 

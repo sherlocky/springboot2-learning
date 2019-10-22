@@ -1,4 +1,4 @@
-package com.sherlocky.springboot2.shirojwt.domain.vo;
+package com.sherlocky.springboot2.shirojwt.domain.bo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -35,15 +35,15 @@ public class JwtAccount implements Serializable {
      */
     private String audience;
     /**
-     * 访问主张-角色(JWT令牌此项有值)
+     * 私有声明-角色(JWT令牌此项有值)
      */
     private String roles;
     /**
-     * 访问主张-资源(JWT令牌此项有值)
+     * 私有声明-资源(JWT令牌此项有值)
      */
     private String perms;
     /**
      * 客户地址
      */
-    private String host;
+//    private String host;
 }

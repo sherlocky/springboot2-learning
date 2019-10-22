@@ -1,7 +1,7 @@
 package com.sherlocky.springboot2.shirojwt.shiro.provider;
 
 
-import com.sherlocky.springboot2.shirojwt.domain.vo.UserAccount;
+import com.sherlocky.springboot2.shirojwt.domain.bo.UserAccount;
 
 /**
  * 数据库用户密码账户提供

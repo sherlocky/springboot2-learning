@@ -1,10 +1,13 @@
 package com.sherlocky.springboot2.shirojwt.shiro.realm;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.sherlocky.springboot2.shirojwt.shiro.constant.JwtConstants;
 import com.sherlocky.springboot2.shirojwt.shiro.constant.ShiroConstants;
 import com.sherlocky.springboot2.shirojwt.shiro.token.JwtAuthenticationToken;
 import com.sherlocky.springboot2.shirojwt.shiro.util.JwtUtils;
 import io.jsonwebtoken.MalformedJwtException;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -16,19 +19,12 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.StringUtils;
 import org.springframework.stereotype.Component;
 
-import java.util.Map;
-import java.util.Set;
-
 /**
  * JWT 认证领域
  */
 @Component
+@Slf4j
 public class JwtRealm extends AuthorizingRealm {
-    private static final String JWT_PREFIX = "jwt:";
-    private static final int JWT_PREFIX_LEN = JWT_PREFIX.length();
-    private static final char LEFT = '{';
-    private static final char RIGHT = '}';
-
     @Override
     public Class<?> getAuthenticationTokenClass() {
         // 此realm只支持jwtToken
@@ -55,34 +51,32 @@ public class JwtRealm extends AuthorizingRealm {
             //令牌无效
             throw new AuthenticationException(JwtConstants.TOKEN_ERROR);
         }
-        if (null == payload) {
+        if (!StringUtils.hasText(payload)) {
             //令牌无效
             throw new AuthenticationException(JwtConstants.TOKEN_ERROR);
         }
-        return new SimpleAuthenticationInfo("jwt:" + payload, jwt, this.getName());
+        return new SimpleAuthenticationInfo(payload, jwt, this.getName());
     }
 
     // 授权
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
         String payload = (String) principalCollection.getPrimaryPrincipal();
-        // TODO 此处JSON 判断获取不合理，改一下
-        // likely to be json, parse it:
-        if (payload.startsWith(JWT_PREFIX) && payload.charAt(JWT_PREFIX_LEN) == LEFT
-                && payload.charAt(payload.length() - 1) == RIGHT) {
-
-            Map<String, Object> payloadMap = JwtUtils.readValue(payload.substring(JWT_PREFIX_LEN));
-            Set<String> roles = StringUtils.splitToSet((String) payloadMap.get("roles"), ShiroConstants.ROLES_SEPARATOR);
-            Set<String> permissions = StringUtils.splitToSet((String) payloadMap.get("perms"), ShiroConstants.ROLES_SEPARATOR);
-            SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-            if (null != roles && !roles.isEmpty()) {
-                info.setRoles(roles);
-            }
-            if (null != permissions && !permissions.isEmpty()) {
-                info.setStringPermissions(permissions);
-            }
-            return info;
+        if (!JSON.isValidObject(payload)) {
+            log.error("$$$ 该payload不是合法的json字符串");
+            return null;
         }
-        return null;
+        JSONObject payloadObject = JSON.parseObject(payload);
+        String rolesStr = payloadObject.getString(JwtConstants.CLAIMS_ROLES);
+        SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+        if (StringUtils.hasText(rolesStr)) {
+            info.setRoles(StringUtils.splitToSet(payloadObject.getString(""), ShiroConstants.ROLES_SEPARATOR));
+        }
+        // 本例未引入权限，故此处权限Set会永远为空
+        String permissionsStr = payloadObject.getString(JwtConstants.CLAIMS_PERMISSIONS);
+        if (StringUtils.hasText(permissionsStr)) {
+            info.setStringPermissions(StringUtils.splitToSet(payloadObject.getString(""), ShiroConstants.ROLES_SEPARATOR));
+        }
+        return info;
     }
 }

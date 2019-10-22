@@ -1,7 +1,7 @@
 package com.sherlocky.springboot2.shirojwt.shiro.matcher;
 
 
-import com.sherlocky.springboot2.shirojwt.domain.vo.JwtAccount;
+import com.sherlocky.springboot2.shirojwt.domain.bo.JwtAccount;
 import com.sherlocky.springboot2.shirojwt.shiro.constant.JwtConstants;
 import com.sherlocky.springboot2.shirojwt.shiro.util.JwtUtils;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -25,7 +25,7 @@ public class JwtMatcher implements CredentialsMatcher {
         String jwt = (String) authenticationInfo.getCredentials();
         JwtAccount jwtAccount = null;
         try {
-            jwtAccount = JwtUtils.parseJwt(jwt, JwtConstants.SECRET_KEY);
+            jwtAccount = JwtUtils.parseJwt(jwt);
         } catch (SignatureException | UnsupportedJwtException | MalformedJwtException | IllegalArgumentException e) {
             // 令牌错误
             throw new AuthenticationException(JwtConstants.TOKEN_ERROR);

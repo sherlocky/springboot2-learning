@@ -3,6 +3,7 @@ package com.sherlocky.springboot2.shirojwt.util;
 import com.alibaba.fastjson.JSON;
 import com.sherlocky.springboot2.shirojwt.support.XssSqlHttpServletRequestWrapper;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.MapUtils;
 import org.apache.shiro.web.util.WebUtils;
 
 import javax.servlet.ServletRequest;
@@ -53,16 +54,18 @@ public class RequestResponseUtil {
         if (request.getAttribute(STR_BODY) != null) {
             // 已经读出则返回attribute中的body
             return (Map<String, String>) request.getAttribute(STR_BODY);
-        } else {
-            try {
-                Map<String, String> maps = JSON.parseObject(request.getInputStream(), Map.class);
-                dataMap.putAll(maps);
-                request.setAttribute(STR_BODY, dataMap);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return dataMap;
         }
+        //rest 风格的，POST 请求必须以 Content-Type=application/json 形式
+        try {
+            Map<String, String> maps = JSON.parseObject(request.getInputStream(), Map.class);
+            if (MapUtils.isNotEmpty(maps)) {
+                dataMap.putAll(maps);
+            }
+            request.setAttribute(STR_BODY, dataMap);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return dataMap;
     }
 
     /**

@@ -1,10 +1,10 @@
 package com.sherlocky.springboot2.shirojwt.shiro.realm;
 
 
-import com.sherlocky.springboot2.shirojwt.domain.vo.UserAccount;
+import com.sherlocky.common.util.Md5Utils;
+import com.sherlocky.springboot2.shirojwt.domain.bo.UserAccount;
 import com.sherlocky.springboot2.shirojwt.shiro.provider.AccountProvider;
 import com.sherlocky.springboot2.shirojwt.shiro.token.PasswordAuthenticationToken;
-import com.sherlocky.springboot2.shirojwt.util.Md5Util;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
@@ -42,7 +42,7 @@ public class PasswordRealm extends AuthorizingRealm {
         UserAccount userAccount = accountProvider.loadAccount(account);
         if (userAccount != null) {
             // 用盐对密码进行MD5加密
-            ((PasswordAuthenticationToken) authenticationToken).setPassword(Md5Util.md5(((PasswordAuthenticationToken) authenticationToken).getPassword() + userAccount.getSalt()));
+            ((PasswordAuthenticationToken) authenticationToken).setPassword(Md5Utils.md5(((PasswordAuthenticationToken) authenticationToken).getPassword() + userAccount.getSalt()));
             return new SimpleAuthenticationInfo(account, userAccount.getPassword(), getName());
         } else {
             return new SimpleAuthenticationInfo(account, "", getName());

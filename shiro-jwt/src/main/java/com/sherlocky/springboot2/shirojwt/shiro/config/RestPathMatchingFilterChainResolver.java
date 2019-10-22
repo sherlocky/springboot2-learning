@@ -16,6 +16,15 @@ import java.util.Iterator;
 /**
  * REST 风格支持的路径匹配过滤器链 处理
  * <p>继承了 PathMatchingFilterChainResolver </p>
+ *
+ * <p>自定义了REST 风格的 Shiro过滤器链的规则，url = url + "==" + httpMethod</p>
+ *
+ * <p>
+ *   采用RBAC(基于角色的权限访问控制)授权模型，即用户--角色--资源，
+ *   用户不直接和权限打交道，角色拥有资源，用户拥有这个角色就有权使用角色所拥有的资源。
+ *   所有这里没有权限一说，签发jwt里面也就只有用户所拥有的角色而没有权限。
+ *   可参考：https://segmentfault.com/a/1190000014368885
+ * </p>
  */
 @Slf4j
 @NoArgsConstructor

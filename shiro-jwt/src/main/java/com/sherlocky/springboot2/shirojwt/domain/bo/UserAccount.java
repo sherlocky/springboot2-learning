@@ -1,4 +1,4 @@
-package com.sherlocky.springboot2.shirojwt.domain.vo;
+package com.sherlocky.springboot2.shirojwt.domain.bo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

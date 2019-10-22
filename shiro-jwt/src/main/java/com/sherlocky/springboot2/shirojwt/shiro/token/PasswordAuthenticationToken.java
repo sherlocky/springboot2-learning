@@ -15,8 +15,8 @@ public class PasswordAuthenticationToken implements AuthenticationToken {
     private String account;
     private String password;
     private String timestamp;
-    private String host;
-    private String dynamicKey;
+    //private String host;
+    //private String dynamicKey;
 
     @Override
     public Object getPrincipal() {

@@ -6,7 +6,11 @@ package com.sherlocky.springboot2.shirojwt.shiro.constant;
  * @date: 2019/10/18 16:50
  */
 public class JwtConstants {
-    public static final String SECRET_KEY = "%3Dk^dZ4Wf8Toz*xXpWQwgOL";
+    /**
+     * JWS 私有声明中的 角色和权限 属性
+     */
+    public static final String CLAIMS_ROLES = "roles";
+    public static final String CLAIMS_PERMISSIONS = "perms";
 
     /** 令牌 过期 */
     public static final String TOKEN_EXPIRED = "TOKEN_EXPIRED";

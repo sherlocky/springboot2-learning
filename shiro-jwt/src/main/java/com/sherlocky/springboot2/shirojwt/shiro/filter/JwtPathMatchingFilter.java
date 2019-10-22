@@ -2,7 +2,7 @@ package com.sherlocky.springboot2.shirojwt.shiro.filter;
 
 import com.alibaba.fastjson.JSON;
 import com.sherlocky.springboot2.shirojwt.constant.StatusCodeEnum;
-import com.sherlocky.springboot2.shirojwt.domain.vo.ResponseBean;
+import com.sherlocky.springboot2.shirojwt.domain.bo.ResponseBean;
 import com.sherlocky.springboot2.shirojwt.service.AccountService;
 import com.sherlocky.springboot2.shirojwt.shiro.constant.JwtConstants;
 import com.sherlocky.springboot2.shirojwt.shiro.token.JwtAuthenticationToken;

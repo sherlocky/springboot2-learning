@@ -1,7 +1,7 @@
 package com.sherlocky.springboot2.shirojwt.shiro.provider.impl;
 
 
-import com.sherlocky.springboot2.shirojwt.domain.vo.UserAccount;
+import com.sherlocky.springboot2.shirojwt.domain.bo.UserAccount;
 import com.sherlocky.springboot2.shirojwt.service.AccountService;
 import com.sherlocky.springboot2.shirojwt.shiro.provider.AccountProvider;
 import org.springframework.beans.factory.annotation.Autowired;

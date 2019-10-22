@@ -1,6 +1,6 @@
 package com.sherlocky.springboot2.shirojwt.service;
 
-import com.sherlocky.springboot2.shirojwt.domain.vo.AuthUser;
+import com.sherlocky.springboot2.shirojwt.domain.po.AuthUserDO;
 
 import java.util.List;
 
@@ -9,17 +9,19 @@ import java.util.List;
  */
 public interface UserService {
 
-    String loadAccountRole(String appId);
+    String loadAccountRole(String account);
 
-    List<AuthUser> getUserList();
+    List<AuthUserDO> getUserList();
 
-    List<AuthUser> getUserListByRoleId(Integer roleId);
+    List<AuthUserDO> getUserListByRoleId(Integer roleId);
 
     boolean authorityUserRole(String appId, int roleId);
 
     boolean deleteAuthorityUserRole(String uid, int roleId);
 
-    AuthUser getUserByAccount(String account);
+    AuthUserDO getUserByAccount(String account);
 
-    List<AuthUser> getNotAuthorityUserListByRoleId(Integer roleId);
+    AuthUserDO getUserByUid(String uid);
+
+    List<AuthUserDO> getNotAuthorityUserListByRoleId(Integer roleId);
 }

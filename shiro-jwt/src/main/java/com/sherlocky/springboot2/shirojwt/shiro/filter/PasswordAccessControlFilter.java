@@ -1,15 +1,18 @@
 package com.sherlocky.springboot2.shirojwt.shiro.filter;
 
 import com.sherlocky.springboot2.shirojwt.constant.StatusCodeEnum;
-import com.sherlocky.springboot2.shirojwt.domain.vo.ResponseBean;
+import com.sherlocky.springboot2.shirojwt.domain.bo.ResponseBean;
 import com.sherlocky.springboot2.shirojwt.shiro.token.PasswordAuthenticationToken;
 import com.sherlocky.springboot2.shirojwt.shiro.util.DynamicKeyCacheUtils;
 import com.sherlocky.springboot2.shirojwt.shiro.util.ServletRequestUtils;
+import com.sherlocky.springboot2.shirojwt.util.AesUtils;
 import com.sherlocky.springboot2.shirojwt.util.RequestResponseUtil;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.ShiroException;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.subject.Subject;
@@ -38,11 +41,22 @@ public class PasswordAccessControlFilter extends AccessControlFilter {
         return null != subject && subject.isAuthenticated();
     }
 
+    /**
+     * 对登录/注册请求进行拦截，判断其是正常登录注册还是获取动态加密秘钥请求，正常认证就走shiro，
+     * 判断为获取秘钥则生成16随机码，将秘钥以<远程IP，秘钥>的<key,value>形式存储到redis，设置其有效时间
+     * @param request
+     * @param response
+     * @return
+     * @throws Exception
+     */
     @Override
     protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
         // 判断若为获取登录注册加密动态秘钥请求
         if (isPasswordTokenGet(request)) {
-            // 动态生成秘钥，redis存储秘钥供之后秘钥验证使用，设置有效期5秒用完即丢弃
+            /**
+             * 动态生成秘钥，redis存储秘钥供之后秘钥验证使用，设置有效期5秒用完即丢弃
+             * 设置有效期是为了防止被其他人截取到加密密码冒充用户的情况，把风险降更低。
+             */
             String dynamicKey = RandomStringUtils.randomAlphanumeric(16);
             String userKey = RandomStringUtils.randomAlphanumeric(6);
             try {
@@ -67,7 +81,7 @@ public class PasswordAccessControlFilter extends AccessControlFilter {
                 authenticationToken = createPasswordToken(request);
             } catch (Exception e) {
                 // response 告知无效请求
-                RequestResponseUtil.responseWrite(ResponseBean.error(StatusCodeEnum.INVALID_REQUEST), response);
+                RequestResponseUtil.responseWrite(ResponseBean.error(StatusCodeEnum.SYSTEM_UNKNOWN_ERROR), response);
                 return false;
             }
 
@@ -121,7 +135,6 @@ public class PasswordAccessControlFilter extends AccessControlFilter {
 
     private boolean isAccountRegisterPost(ServletRequest request) {
         Map<String, String> map = RequestResponseUtil.getRequestBodyMap(request);
-        String uid = map.get("uid");
         String username = map.get("username");
         String methodName = map.get("methodName");
         String password = map.get("password");
@@ -129,10 +142,15 @@ public class PasswordAccessControlFilter extends AccessControlFilter {
                 && "POST".equalsIgnoreCase(((HttpServletRequest) request).getMethod())
                 && null != username
                 && null != password
-                && null != uid
                 && "register".equals(methodName);
     }
 
+    /**
+     * 创建认证信息,其中就有包括获取redis中对应IP的动态秘钥
+     * @param request
+     * @return
+     * @throws Exception
+     */
     private AuthenticationToken createPasswordToken(ServletRequest request) throws Exception {
         Map<String, String> map = RequestResponseUtil.getRequestBodyMap(request);
         String account = map.get("account");
@@ -141,6 +159,12 @@ public class PasswordAccessControlFilter extends AccessControlFilter {
         String host = ServletRequestUtils.host(request);
         String userKey = map.get("userKey");
         String dynamicKey = DynamicKeyCacheUtils.get(redisTemplate, host, userKey);
-        return new PasswordAuthenticationToken(account, password, timestamp, host, dynamicKey);
+        if (StringUtils.isBlank(dynamicKey)) {
+            throw new ShiroException("$$$ 登录超时，缓存的dynamicKey已失效！");
+        }
+        // 从Redis取出密码传输加密解密秘钥
+        // 解密后得到明文的密码
+        String realPassword = AesUtils.aesDecode(password, dynamicKey);
+        return new PasswordAuthenticationToken(account, realPassword, timestamp);//TODO, host, dynamicKey);
     }
 }

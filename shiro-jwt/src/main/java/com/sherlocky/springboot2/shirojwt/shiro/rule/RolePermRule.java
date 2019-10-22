@@ -13,7 +13,7 @@ import java.util.Set;
 @Data
 public class RolePermRule implements Serializable {
     private static final long serialVersionUID = 1L;
-    private static final String ANON_ROLE = "role_anon";
+    private static final String ROLE_ANON = "role_anon";
 
     /**
      * 资源URL
@@ -38,11 +38,11 @@ public class RolePermRule implements Serializable {
 
         StringBuilder stringBuilder = new StringBuilder();
         // 约定若role_anon角色拥有此uri资源的权限,则此uri资源直接访问不需要认证和权限
-        if (!StringUtils.isEmpty(this.getNeedRoles()) && roleSet.contains(ANON_ROLE)) {
+        if (!StringUtils.isEmpty(this.getNeedRoles()) && roleSet.contains(ROLE_ANON)) {
             stringBuilder.append(ShiroConstants.ANON);
         }
         //  其他自定义资源uri需通过jwt认证和角色认证
-        if (!StringUtils.isEmpty(this.getNeedRoles()) && !roleSet.contains(ANON_ROLE)) {
+        if (!StringUtils.isEmpty(this.getNeedRoles()) && !roleSet.contains(ROLE_ANON)) {
             stringBuilder.append(String.format("jwt[%s]", this.getNeedRoles()));
         }
         return stringBuilder.length() > 0 ? stringBuilder.toString() : null;
