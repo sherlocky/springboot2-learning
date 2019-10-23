@@ -1,6 +1,6 @@
 package com.sherlocky.springboot2.shirojwt.support;
 
-import com.sherlocky.springboot2.shirojwt.util.XssUtil;
+import com.sherlocky.common.util.XssUtils;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -92,7 +92,7 @@ public class XssSqlHttpServletRequestWrapper extends HttpServletRequestWrapper {
             return null;
         }
         // 过滤XSS 和 SQL 注入
-        return XssUtil.stripSqlXss(value);
+        return XssUtils.stripSqlXss(value);
     }
 
 }

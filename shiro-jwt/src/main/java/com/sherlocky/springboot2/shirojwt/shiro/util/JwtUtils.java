@@ -2,9 +2,9 @@ package com.sherlocky.springboot2.shirojwt.shiro.util;
 
 import com.alibaba.fastjson.JSON;
 import com.sherlocky.common.util.CryptoUtils;
+import com.sherlocky.common.util.UUIDUtils;
 import com.sherlocky.springboot2.shirojwt.domain.bo.JwtAccount;
 import com.sherlocky.springboot2.shirojwt.shiro.constant.JwtConstants;
-import com.sherlocky.springboot2.shirojwt.util.UUIDUtils;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.impl.DefaultJwsHeader;
 import io.jsonwebtoken.impl.compression.DefaultCompressionCodecResolver;

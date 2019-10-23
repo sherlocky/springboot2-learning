@@ -1,11 +1,11 @@
 package com.sherlocky.springboot2.shirojwt.shiro.filter;
 
+import com.sherlocky.common.util.AesUtils;
 import com.sherlocky.springboot2.shirojwt.constant.StatusCodeEnum;
 import com.sherlocky.springboot2.shirojwt.domain.bo.ResponseBean;
 import com.sherlocky.springboot2.shirojwt.shiro.token.PasswordAuthenticationToken;
 import com.sherlocky.springboot2.shirojwt.shiro.util.DynamicKeyCacheUtils;
 import com.sherlocky.springboot2.shirojwt.shiro.util.ServletRequestUtils;
-import com.sherlocky.springboot2.shirojwt.util.AesUtils;
 import com.sherlocky.springboot2.shirojwt.util.RequestResponseUtil;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -164,7 +164,7 @@ public class PasswordAccessControlFilter extends AccessControlFilter {
         }
         // 从Redis取出密码传输加密解密秘钥
         // 解密后得到明文的密码
-        String realPassword = AesUtils.aesDecode(password, dynamicKey);
+        String realPassword = AesUtils.decrypt(password, dynamicKey);
         return new PasswordAuthenticationToken(account, realPassword, timestamp);//TODO, host, dynamicKey);
     }
 }

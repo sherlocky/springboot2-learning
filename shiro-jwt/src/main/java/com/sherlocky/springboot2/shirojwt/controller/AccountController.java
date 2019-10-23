@@ -1,19 +1,19 @@
 package com.sherlocky.springboot2.shirojwt.controller;
 
+import com.sherlocky.common.util.AesUtils;
 import com.sherlocky.common.util.Md5Utils;
+import com.sherlocky.common.util.UUIDUtils;
 import com.sherlocky.springboot2.shirojwt.constant.StatusCodeEnum;
-import com.sherlocky.springboot2.shirojwt.domain.po.AuthUserDO;
 import com.sherlocky.springboot2.shirojwt.domain.bo.ResponseBean;
 import com.sherlocky.springboot2.shirojwt.domain.dto.UserDTO;
+import com.sherlocky.springboot2.shirojwt.domain.po.AuthUserDO;
 import com.sherlocky.springboot2.shirojwt.service.AccountService;
 import com.sherlocky.springboot2.shirojwt.service.UserService;
 import com.sherlocky.springboot2.shirojwt.shiro.util.DynamicKeyCacheUtils;
 import com.sherlocky.springboot2.shirojwt.shiro.util.JwtSessionCacheUtils;
 import com.sherlocky.springboot2.shirojwt.shiro.util.JwtUtils;
 import com.sherlocky.springboot2.shirojwt.shiro.util.ServletRequestUtils;
-import com.sherlocky.springboot2.shirojwt.util.AesUtils;
 import com.sherlocky.springboot2.shirojwt.util.RequestResponseUtil;
-import com.sherlocky.springboot2.shirojwt.util.UUIDUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.BeanUtils;
@@ -103,7 +103,7 @@ public class AccountController extends BaseController {
 
         // 从Redis取出密码传输加密解密秘钥
         String dynamicKey = DynamicKeyCacheUtils.get(redisTemplate, ServletRequestUtils.host(request), userKey);
-        String realPassword = AesUtils.aesDecode(password, dynamicKey);
+        String realPassword = AesUtils.decrypt(password, dynamicKey);
         // 6 位盐
         String salt = RandomStringUtils.randomAlphanumeric(6);
         // 存储到数据库的密码为 MD5(原密码+盐值)
