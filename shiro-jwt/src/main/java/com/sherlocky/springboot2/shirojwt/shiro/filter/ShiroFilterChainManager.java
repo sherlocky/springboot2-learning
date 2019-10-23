@@ -57,10 +57,10 @@ public class ShiroFilterChainManager {
         /** TODO 应该设置到 配置文件中 */
         // -------------anon 默认过滤器忽略的URL
         List<String> defalutAnon = Arrays.asList("/static/**", "/css/**", "/js/**", "/image/**");
-        defalutAnon.forEach(ignored -> filterChain.put(ignored, ShiroConstants.ANON));
+        defalutAnon.forEach(ignored -> filterChain.put(ignored, ShiroConstants.FILTER_ANON));
         // -------------auth 默认需要认证过滤器的URL 走auth--PasswordFilter
         List<String> defalutAuth = Arrays.asList("/account/**");
-        defalutAuth.forEach(auth -> filterChain.put(auth, ShiroConstants.AUTH));
+        defalutAuth.forEach(auth -> filterChain.put(auth, ShiroConstants.FILTER_AUTH));
         // -------------dynamic 动态URL
         if (shiroFilterRulesProvider == null) {
             return filterChain;

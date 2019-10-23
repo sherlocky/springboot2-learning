@@ -39,7 +39,7 @@ public class RolePermRule implements Serializable {
         StringBuilder stringBuilder = new StringBuilder();
         // 约定若role_anon角色拥有此uri资源的权限,则此uri资源直接访问不需要认证和权限
         if (!StringUtils.isEmpty(this.getNeedRoles()) && roleSet.contains(ROLE_ANON)) {
-            stringBuilder.append(ShiroConstants.ANON);
+            stringBuilder.append(ShiroConstants.FILTER_ANON);
         }
         //  其他自定义资源uri需通过jwt认证和角色认证
         if (!StringUtils.isEmpty(this.getNeedRoles()) && !roleSet.contains(ROLE_ANON)) {

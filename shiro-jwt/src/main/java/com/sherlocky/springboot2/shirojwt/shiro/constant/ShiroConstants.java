@@ -8,8 +8,8 @@ package com.sherlocky.springboot2.shirojwt.shiro.constant;
 public class ShiroConstants {
     /** 角色字符串分隔符 */
     public static final String ROLES_SEPARATOR = ",";
-    /** 匿名 */
-    public static final String ANON = "anon";
-    /** 认证 */
-    public static final String AUTH = "auth";
+    /** 匿名拦截器 -- 不需要登录就能访问 */
+    public static final String FILTER_ANON = "anon";
+    /** 认证 需要登录认证才能访问*/
+    public static final String FILTER_AUTH = "auth";
 }

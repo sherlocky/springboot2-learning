@@ -8,9 +8,10 @@ import org.springframework.web.bind.annotation.RestController;
  * @date: 2019/10/21 16:49
  */
 @RestController
-@RequestMapping("/")
+@RequestMapping("/index")
 public class IndexController extends BaseController {
 
+    @RequestMapping("")
     public String index() {
         return "首页~";
     }
