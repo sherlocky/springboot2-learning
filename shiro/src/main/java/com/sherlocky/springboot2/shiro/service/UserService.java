@@ -16,4 +16,6 @@ public interface UserService {
     List<UserPO> listUsers();
 
     boolean updateUser(UserPO user);
+
+    boolean createUser(UserPO user);
 }

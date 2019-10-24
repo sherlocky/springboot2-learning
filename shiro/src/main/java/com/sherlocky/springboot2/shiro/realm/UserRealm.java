@@ -27,7 +27,7 @@ public class UserRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
-        //TODO 加这一步的目的是在Post请求的时候会先进认证，然后再到请求
+        // 加这一步的目的是在Post请求的时候会先进认证，然后再到请求
         if (authenticationToken.getPrincipal() == null) {
             return null;
         }
@@ -49,8 +49,6 @@ public class UserRealm extends AuthorizingRealm {
          * @see com.sherlocky.springboot2.shiro.config.ShiroConfigure#hashedCredentialsMatcher()
          */
         SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(user, user.getPassword(), ByteSource.Util.bytes(user.getSalt()), getName());
-        // TODO What's this ?
-        // info.setCredentials(user);
         return info;
     }
 

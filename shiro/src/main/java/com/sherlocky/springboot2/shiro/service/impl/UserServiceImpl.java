@@ -59,4 +59,10 @@ public class UserServiceImpl implements UserService {
         // 。。。
         return true;
     }
+
+    @Override
+    public boolean createUser(UserPO user) {
+        // 。。。
+        return true;
+    }
 }

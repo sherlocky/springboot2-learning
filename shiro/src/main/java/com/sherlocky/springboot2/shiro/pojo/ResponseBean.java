@@ -41,6 +41,11 @@ public class ResponseBean<T> implements Serializable {
         return dr.code("0");
     }
 
+    public static <T>ResponseBean<T> success(String message){
+        ResponseBean<T> dr = new ResponseBean<>();
+        return dr.code("0").msg(message);
+    }
+
     public static <T>ResponseBean<T> success(T data){
         ResponseBean<T> dr = new ResponseBean<>();
         return dr.code("0").data(data);
