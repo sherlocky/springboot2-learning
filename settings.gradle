@@ -16,4 +16,5 @@ include 'dubbo-producer'
 include 'duboo-consumer'
 include 'dubbo-api'
 include 'shiro-jwt'
+include 'shiro'
 

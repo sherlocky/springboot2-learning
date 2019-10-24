@@ -1,0 +1,16 @@
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation('org.springframework.boot:spring-boot-starter-data-redis')
+
+    // shiro
+    implementation 'org.apache.shiro:shiro-spring-boot-web-starter:1.4.1'
+    /** thymeleaf使用shiro标签
+    implementation 'com.github.theborakompanioni:thymeleaf-extras-shiro:2.0.0'
+    */
+
+    implementation 'com.sherlocky:sherlocky-commons:0.1.0'
+
+    // lombok
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+}
