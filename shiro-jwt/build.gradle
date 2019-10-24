@@ -2,8 +2,16 @@
 repositories {
     //mavenLocal()
     maven {
+        url oss_sonatype_snapshot_maven_url
+    }
+    maven {
+        url maven_url
+    }
+    /*
+    maven {
         url huawei_cloud_maven_url
     }
+    */
 }
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -23,9 +31,16 @@ dependencies {
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.10.7'
 
     implementation 'org.apache.commons:commons-text:1.8'
-    implementation 'com.sherlocky:sherlocky-commons:0.1.0'
+    implementation 'com.sherlocky:sherlocky-commons:0.2.0-SNAPSHOT'
 
     // lombok
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 }
+
+/*
+configurations.all {
+    // 每次构建都检查更新
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+}
+*/
