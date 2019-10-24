@@ -1,0 +1,206 @@
+{
+	"info": {
+		"_postman_id": "669f85b3-565c-44b8-a357-7973921d0186",
+		"name": "SpringBoot2ShiroJWT",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "账号密码登录",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "76a8bb2c-eb77-473f-a73d-728472433afa",
+						"exec": [
+							"pm.sendRequest(\"http://localhost:8080/account/register?dynamicKey=get\", function (err, response) {\r",
+							"    var key = response.json().data.dynamicKey;\r",
+							"    var userKey = response.json().data.userKey;\r",
+							"    \r",
+							"    console.log(key);\r",
+							"    console.log(userKey);\r",
+							"    \r",
+							"    var password = \"admin\";\r",
+							"    \r",
+							"    var dynamicKey = CryptoJS.enc.Utf8.parse(key);\r",
+							"    var passwordSrcs = CryptoJS.enc.Utf8.parse(password);\r",
+							"    \r",
+							"    var passwordAes = CryptoJS.AES.encrypt(passwordSrcs, dynamicKey, {iv: dynamicKey, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7});\r",
+							"    \r",
+							"    pm.environment.set(\"password\", passwordAes.toString());\r",
+							"    pm.environment.set(\"userKey\", userKey.toString());\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n \"account\":\"admin\",\n \"password\":\"{{password}}\",\n \"userKey\":\"{{userKey}}\",\n \"methodName\":\"login\",\n \"timestamp\":\"{{timestamp}}\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/account/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"account",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "账号注册",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "76a8bb2c-eb77-473f-a73d-728472433afa",
+						"exec": [
+							"pm.sendRequest(\"http://localhost:8080/account/register?dynamicKey=get\", function (err, response) {\r",
+							"    var key = response.json().data.dynamicKey;\r",
+							"    var userKey = response.json().data.userKey;\r",
+							"\r",
+							"    console.log(key);\r",
+							"    console.log(userKey);\r",
+							"\r",
+							"    var password = \"admin\";\r",
+							"\r",
+							"    var dynamicKey = CryptoJS.enc.Utf8.parse(key);\r",
+							"    var passwordSrcs = CryptoJS.enc.Utf8.parse(password);\r",
+							"    \r",
+							"    var passwordAes = CryptoJS.AES.encrypt(passwordSrcs, dynamicKey, {iv: dynamicKey, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7});\r",
+							"    \r",
+							"    pm.environment.set(\"password\", passwordAes.toString());\r",
+							"    pm.environment.set(\"userKey\", userKey.toString());\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n \"username\":\"zhangsan\",\n \"realName\":\"张三\",\n \"password\":\"{{password}}\",\n \"userKey\":\"{{userKey}}\",\n \"methodName\":\"register\",\n \"timestamp\":\"{{timestamp}}\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/account/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"account",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "注册登录时动态token获取",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/account/register?dynamicKey=get",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"account",
+						"register"
+					],
+					"query": [
+						{
+							"key": "dynamicKey",
+							"value": "get"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "首页",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInppcCI6IkdaSVAifQ.H4sIAAAAAAAAAC2LSw6DMAwF7-I1SLjkY7gNSYwaCqXCQRRV3J2AunszmveDIUVooekNYfMw5HtWVnlypFgHDHlYchUUIKvLYRem-M4URTLJk5dx9q-9HLZ02S5Bi9oioTVGFcDfz1_U-hbLPPL93CXxBMcJAnFu_YEAAAA.4pCLffIdGPs1IPHOhZDlwy2Y9DI2g8KyAuxk872-fQI",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/index",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"index"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "2388a8e0-b063-43f3-826d-04a910f881b8",
+				"type": "text/javascript",
+				"exec": [
+					"//设置当前时间戳毫秒",
+					"postman.setGlobalVariable(\"timestamp\", Math.round(new Date().getTime()));"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "da3c1478-d0ba-46e5-a0b7-d77d6c07561b",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
