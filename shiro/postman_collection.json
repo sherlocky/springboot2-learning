@@ -37,6 +37,27 @@
 			"response": []
 		},
 		{
+			"name": "登录用户信息",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/user/login/info",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"login",
+						"info"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "用户列表",
 			"request": {
 				"method": "GET",
@@ -99,7 +120,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n \"username\":\"user\",\n \"password\":\"123456\",\n \"name\":\"用户new\"\n}"
+					"raw": "{\n \"username\":\"admin\",\n \"name\":\"用户new\"\n}"
 				},
 				"url": {
 					"raw": "http://localhost:8080/user",
