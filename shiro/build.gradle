@@ -9,8 +9,4 @@ dependencies {
     */
 
     implementation 'com.sherlocky:sherlocky-commons:0.1.0'
-
-    // lombok
-    compileOnly 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
 }

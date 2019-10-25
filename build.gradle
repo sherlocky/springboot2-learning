@@ -15,10 +15,11 @@ buildscript {
 
 // 所有子Module的通用配置
 subprojects {
-    apply plugin: 'java'
-    //apply plugin: 'eclipse'
-    apply plugin: 'org.springframework.boot'
-    apply plugin: 'io.spring.dependency-management'
+    plugins {
+        id 'org.springframework.boot' version '2.1.9.RELEASE'
+        id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+        id 'java'
+    }
 
     group = 'com.sherlocky'
     version = '0.0.1-SNAPSHOT'
@@ -29,12 +30,11 @@ subprojects {
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
 
-    /**
-     // 生成启动脚本并打包
-     def appMainClass = 'com.sherlocky.job.Application'
-     apply plugin: 'application'
-     mainClassName = appMainClass
-     */
+    configurations {
+        compileOnly {
+            extendsFrom annotationProcessor
+        }
+    }
 
     // 项目自身需要的资源
     repositories {
@@ -71,9 +71,11 @@ subprojects {
         // runtime('javax.servlet:javax.servlet-api:3.0.1')
         */
 
-        testImplementation('org.springframework.boot:spring-boot-starter-test')
+        // lombok
+        compileOnly 'org.projectlombok:lombok'
+        annotationProcessor 'org.projectlombok:lombok'
+
+        testImplementation 'org.springframework.boot:spring-boot-starter-test'
         testCompile group: 'junit', name: 'junit', version: '4.12'
     }
 }
-// 对于 springboot 的 gradle 项目，可以直接运行 bootJar 打可执行jar包
-// 再结合 plugin: 'application'，运行 bootDistTar 或者 bootDistZip 可以打包成带执行脚本的包
