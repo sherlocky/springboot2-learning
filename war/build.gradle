@@ -4,6 +4,6 @@ plugins {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'com.alibaba:fastjson:1.2.58'
+    implementation 'com.alibaba:fastjson:1.2.62'
     providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
 }
