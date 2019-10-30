@@ -1,0 +1,19 @@
+dependencies {
+    // web starter
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    // security starter
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+
+    // redis starter
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    // 使用springboot默认的lettuce redis客户端，依赖commons-pool2
+    implementation 'org.apache.commons:commons-pool2:2.6.0'
+
+    // session on redis
+    implementation 'org.springframework.session:spring-session-data-redis'
+
+    implementation 'com.alibaba:fastjson:1.2.62'
+
+    testImplementation 'org.springframework.security:spring-security-test'
+}
