@@ -4,7 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
- * 简单redis使用示例
+ * Spring Session简单使用示例
  */
 @SpringBootApplication
 public class Springboot2SessionApplication {
