@@ -7,6 +7,7 @@ import org.springframework.session.web.http.HeaderHttpSessionIdResolver;
 import org.springframework.session.web.http.HttpSessionIdResolver;
 
 /**
+ * 【未使用，只作为记录】
  * Spring Session 的 @{@link EnableRedisHttpSession} 注解配置等价于 application 配置文件中的: <code>spring.session.store-type=redis</code>
  * <p>
  *   会创建一个实现了 {@link org.springframework.session.web.http.SessionRepositoryFilter} 的 springSessionRepositoryFilter，
@@ -28,7 +29,7 @@ import org.springframework.session.web.http.HttpSessionIdResolver;
  * @since:
  */
 // @EnableRedisHttpSession
-public class RedisSessionConfiguration {
+public class RedisHttpSessionConfigurationSample {
 
     /**
      * 创建一个RedisConnectionFactory 通过Lettuce客户端将Spring Session连接到Redis Server的
