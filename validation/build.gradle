@@ -1,0 +1,6 @@
+dependencies {
+    //包含子依赖 org.hibernate.validator:hibernate-validator
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.apache.commons:commons-lang3:3.9'
+    implementation 'com.alibaba:fastjson:1.2.62'
+}

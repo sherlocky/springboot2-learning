@@ -21,4 +21,5 @@ include 'admin-server'
 include 'admin-client'
 include 'session'
 include 'xss'
+include 'validation'
 
