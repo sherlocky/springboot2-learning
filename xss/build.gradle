@@ -1,0 +1,10 @@
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'commons-io:commons-io:2.6'
+    implementation 'org.apache.commons:commons-lang3:3.9'
+    /**
+     * ESAPI（Enterprise Security API）是一个免费开源的Web应用程序API，目的帮助开发者开发出更加安全的代码
+     * 需要 ESAPI.properties、validation.properties 两个配置文件
+     */
+    implementation 'org.owasp.esapi:esapi:2.0.1'
+}

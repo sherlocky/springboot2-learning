@@ -20,4 +20,5 @@ include 'shiro'
 include 'admin-server'
 include 'admin-client'
 include 'session'
+include 'xss'
 
