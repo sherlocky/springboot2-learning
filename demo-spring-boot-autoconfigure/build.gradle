@@ -1,0 +1,34 @@
+plugins {
+    id 'java-library'
+}
+
+dependencies {
+    /**
+     * 增加 SpringBoot 自身的自动配置作为依赖
+     */
+    api "org.springframework.boot:spring-boot-autoconfigure"
+    /**
+     * 实际使用中 starter 中可能有非常多的属性，我们可以将这些属性集中管理。
+     * 当我们需要使用这些属性时，为了让 IDE 给出更友好的提示:
+     * 还需要添加以下依赖，
+     * 这样在 compile 时，会生成一个名为 [spring-configuration-metadata.json] 的 JSON 文件
+     */
+    // Gradle 4.6+
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+    // gradle 4.5-
+    // compileOnly "org.springframework.boot:spring-boot-configuration-processor"
+    /**
+     * 对于类路径上的每个自动配置类，Spring Boot 必须计算 @Conditional… 条件值，
+     * 用于决定是否加载自动配置及其所需的所有类，根据 Spring 启动应用程序中 starter 的大小和数量，
+     * 这可能是一个非常昂贵的操作，并且会影响启动时间。
+     * 为了提升启动时间，引入以下依赖：
+     * 这个注解会生成一个名为 [spring-autoconfigure-metadata.properties] 的 Property 文件
+     * 这样，Spring Boot 在启动期间读取这些元数据，可以过滤出不满足条件的配置，而不必实际检查这些类，提升启动速度
+     */
+    compileOnly "org.springframework.boot:spring-boot-autoconfigure-processor"
+}
+
+// 作为 autoconfigure，不能以bootJar的形式打包，要屏蔽掉（默认开启）
+bootJar {
+    enabled = false
+}

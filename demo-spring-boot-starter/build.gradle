@@ -1,0 +1,16 @@
+plugins {
+    id 'java-library'
+}
+
+dependencies {
+    /**
+     * Starter Module 的构建很简单，可以认为它就是一个空 module，
+     * 除了依赖 Auto-Configure Module，其唯一作用就是为了使用 starter 功能特性提供所有必须依赖。
+     */
+    api project(':demo-spring-boot-autoconfigure')
+}
+
+// 作为 starter，不能以bootJar的形式打包，要屏蔽掉（默认开启）
+bootJar {
+    enabled = false
+}

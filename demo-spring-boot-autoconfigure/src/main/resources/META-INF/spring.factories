@@ -1,0 +1,5 @@
+# Auto Configure
+# Spring 启动时会扫描其 classpath 中所有的 spring.factoreis 文件，并加载里面的声明配置
+# 自动配置类就绪后，我们的 Spring Boot Starter 就有了一个自动激活的入口点
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.sherlocky.springboot2.starter.demo.DemoServiceAutoConfiguration

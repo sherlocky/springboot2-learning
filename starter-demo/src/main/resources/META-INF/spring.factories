@@ -1,3 +1,0 @@
-# Auto Configure
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.sherlocky.springboot2.starter.demo.DemoServiceAutoConfiguration

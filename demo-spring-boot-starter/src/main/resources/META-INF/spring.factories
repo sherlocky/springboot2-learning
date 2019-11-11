@@ -1,0 +1,3 @@
+# providers， 该文件主要作用是说明 starter module 的依赖信息，多个依赖以逗号分隔就可以。
+# 该文件不会影响 starter 的使用，可有可无
+providers: demo-spring-boot-autoconfigure
