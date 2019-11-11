@@ -2,4 +2,7 @@ dependencies {
 
 }
 
-bootJar {}
+// 作为 api，不能以bootJar的形式打包，要屏蔽掉（默认开启）
+bootJar {
+    enabled = false
+}
