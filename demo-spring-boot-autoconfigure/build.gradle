@@ -12,6 +12,8 @@ dependencies {
      * 当我们需要使用这些属性时，为了让 IDE 给出更友好的提示:
      * 还需要添加以下依赖，
      * 这样在 compile 时，会生成一个名为 [spring-configuration-metadata.json] 的 JSON 文件
+     *
+     * 具体的可以参考：[Spring Boot 如何让yml,properties配置文件有提示](https://www.jianshu.com/p/497d6a231b65)
      */
     // Gradle 4.6+
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
