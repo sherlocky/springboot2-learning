@@ -21,7 +21,7 @@ public class TestLockThread implements Runnable {
     public void run() {
         System.out.println(Thread.currentThread().getName() + "_1_$$$$$$$$$$$$$$$" + System.currentTimeMillis() + "$$$$$$$$$$$$$$$");
         System.out.println(Thread.currentThread().getName() + "_2_###############" + System.currentTimeMillis() + "##############");
-        Lock lock = redisLockRegistry.obtain(RedisLockConfiguration.LOCK_KEY);
+        Lock lock = redisLockRegistry.obtain(LockConstants.LOCK_KEY);
         System.out.println(Thread.currentThread().getName() + "_3_###############" + System.currentTimeMillis() + "##############");
         boolean b1 = false;
         try {

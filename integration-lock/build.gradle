@@ -20,5 +20,9 @@ dependencies {
     implementation('org.springframework.boot:spring-boot-starter-data-redis')
     implementation('org.springframework.integration:spring-integration-redis')
 
+    implementation('org.springframework.integration:spring-integration-zookeeper')
+    // Netflix公司开源的一套Zookeeper客户端框架
+    implementation 'org.apache.curator:curator-recipes:2.13.0'
+
     implementation('com.alibaba:fastjson:1.2.58')
 }
