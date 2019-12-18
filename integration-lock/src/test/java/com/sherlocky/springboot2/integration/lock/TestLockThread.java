@@ -28,15 +28,25 @@ public class TestLockThread implements Runnable {
             b1 = lock.tryLock(3, TimeUnit.SECONDS);
             System.out.println(Thread.currentThread().getName() + "_4_###############" + System.currentTimeMillis() + "##############");
             info(Thread.currentThread().getName() + " b1 is : {}", b1);
-
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            System.out.println("获取锁失败");
+        }
+        try {
+            // do somethings
             TimeUnit.SECONDS.sleep(5);
-
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        System.out.println(Thread.currentThread().getName() + "_5_###############" + System.currentTimeMillis() + "##############");
-
-        lock.unlock();
+        // 拿到了锁
+        if (b1) {
+            // 一定要先获得锁的前提下,才能解锁
+            lock.unlock();
+            System.out.println(Thread.currentThread().getName() + "_5_释放锁#########" + System.currentTimeMillis() + "##############");
+        } else {
+            System.out.println(Thread.currentThread().getName() + "_5_没有拿到锁#####" + System.currentTimeMillis() + "##############");
+        }
+        System.out.println(Thread.currentThread().getName() + "_6_###############" + System.currentTimeMillis() + "##############");
     }
 
     private void info(String msg, Object obj) {
