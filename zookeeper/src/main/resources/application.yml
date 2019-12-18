@@ -1,0 +1,8 @@
+# PROFILES
+spring:
+  profiles:
+    active: dev
+
+# Zookeeper - curator-recipes
+zookeeper:
+  url: 127.0.0.1:2181

@@ -1,0 +1,5 @@
+dependencies {
+    // Netflix公司开源的一套Zookeeper客户端框架
+    implementation 'org.apache.curator:curator-recipes:4.2.0'
+    implementation('com.alibaba:fastjson:1.2.62')
+}

@@ -23,4 +23,5 @@ include 'admin-client'
 include 'session'
 include 'xss'
 include 'validation'
+include 'zookeeper'
 
