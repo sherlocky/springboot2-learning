@@ -9,12 +9,15 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * Redission 封装的 Redlock 实现分布式锁
- *
+ * <p>
  * https://github.com/redisson/redisson#quick-start
+ * <p>
  * https://redis.io/topics/distlock
- *
- * https://gblog.sherlocky.com/redission/
- *
+ * <p>
+ * https://halo.sherlocky.com/archives/redission/
+ * <p>
+ *     另外 spring integration 也提供了全局锁，可参见：<a href="https://gitee.com/sherlocky/springboot2-learning/tree/master/integration-lock">integration-lock</a>
+ * </p>
  * @author: zhangcx
  * @date: 2019/6/19 14:30
  */
