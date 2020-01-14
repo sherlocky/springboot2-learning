@@ -24,4 +24,5 @@ include 'session'
 include 'xss'
 include 'validation'
 include 'zookeeper'
+include 'shut-down'
 
