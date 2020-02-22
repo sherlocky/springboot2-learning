@@ -47,7 +47,6 @@ public class Springboot2MyBatisPlusApplicationTest {
         System.out.println(user);
     }
 
-
     @Test
     public void test004Update() {
         System.out.println(("----- update method test ------"));
@@ -77,5 +76,13 @@ public class Springboot2MyBatisPlusApplicationTest {
             System.out.println(objs.get(0).getClass());
         }
         System.out.println(objs);
+    }
+
+    @Test
+    public void test007SelectByName() {
+        System.out.println(("----- selectByName method test ------"));
+        List<User> userList = userMapper.selectByName("Tom");
+        Assert.assertEquals(1, userList.size());
+        userList.forEach(System.out::println);
     }
 }
