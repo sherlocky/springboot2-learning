@@ -1,0 +1,13 @@
+# PROFILES
+spring:
+  profiles:
+    active: dev
+
+# 将shutdown节点打开，并将 /actuator/shutdown 暴露到web访问
+management:
+  endpoint:
+    shutdown:
+      enabled: true
+    web:
+      exposure:
+        include: shutdown

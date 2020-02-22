@@ -6,4 +6,6 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'com.alibaba:fastjson:1.2.62'
     providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+    // Mockito mock 框架
+    testImplementation 'org.mockito:mockito-core:3.2.4'
 }

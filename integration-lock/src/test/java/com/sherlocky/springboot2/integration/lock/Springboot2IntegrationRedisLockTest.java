@@ -6,6 +6,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.integration.redis.util.RedisLockRegistry;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.concurrent.ExecutorService;
@@ -15,27 +16,64 @@ import java.util.concurrent.TimeoutException;
 import java.util.concurrent.locks.Lock;
 
 /**
- * 测试 Spring data redis 的一些简单用法
+ * 测试 Spring integration redis lock 的一些简单用法
+ * <p>
+ * Redis实现获取到的锁为{@link org.springframework.integration.redis.util.RedisLockRegistry.RedisLock}
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class Springboot2IntegrationLockTest {
+@ActiveProfiles("redis")
+public class Springboot2IntegrationRedisLockTest {
     @Autowired
     RedisLockRegistry redisLockRegistry;
 
+    /**
+     * @throws InterruptedException
+     */
     @Test
     public void test() throws InterruptedException {
-        Lock lock = redisLockRegistry.obtain(RedisLockConfiguration.LOCK_KEY);
-        boolean b1 = lock.tryLock(3, TimeUnit.SECONDS);
-        info("b1 is : {}", b1);
+        Lock lock = redisLockRegistry.obtain(LockConstants.LOCK_KEY);
+        boolean b1 = false;
+        try {
+            System.out.println("###" + System.currentTimeMillis() + "###b1开始争抢锁~");
+            b1 = lock.tryLock(3, TimeUnit.SECONDS);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("###" + System.currentTimeMillis() + "###b1获取锁失败 ： ");
+        }
+        // 只有获取到锁了，才能进入业务代码块
+        if (b1) {
+            try {
+                // do somethings
+                info("###" + System.currentTimeMillis() + "###b1 is : {}", b1);
+            } finally {
+                // finally 中一定要释放锁
+                lock.unlock();
+                System.out.println("###" + System.currentTimeMillis() + "###b1解锁~");
+            }
+        }
 
         TimeUnit.SECONDS.sleep(1);
 
-        boolean b2 = lock.tryLock(3, TimeUnit.SECONDS);
-        info("b2 is : {}", b2);
-
-        lock.unlock();
-        lock.unlock();
+        boolean b2 = false;
+        try {
+            System.out.println("###" + System.currentTimeMillis() + "###b2开始争抢锁~");
+            b2 = lock.tryLock(3, TimeUnit.SECONDS);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("###" + System.currentTimeMillis() + "###b2获取锁失败 ： ");
+        }
+        // 只有获取到锁了，才能进入业务代码块
+        if (b2) {
+            try {
+                // do somethings
+                info("###" + System.currentTimeMillis() + "###b2 is : {}", b2);
+            } finally {
+                // finally 中一定要释放锁
+                lock.unlock();
+                System.out.println("###" + System.currentTimeMillis() + "###b2解锁~");
+            }
+        }
     }
 
     @Test
@@ -74,7 +112,7 @@ public class Springboot2IntegrationLockTest {
          pool-1-thread-1_5_###############1553672793721##############              线程1获取锁成功，获取后sleep了5秒
          pool-1-thread-2_5_###############1553672795963##############              线程2获取锁失败，也sleep了5秒
 
-                                                                                   线程2获取锁失败，所以在 unlock 时抛出异常
+         线程2获取锁失败，所以在 unlock 时抛出异常
          Exception in thread "pool-1-thread-2" java.lang.IllegalStateException: You do not own lock at spring-integration-lock:lock
          at org.springframework.integration.redis.util.RedisLockRegistry$RedisLock.unlock(RedisLockRegistry.java:300)
          at com.sherlocky.springboot2.integration.lock.TestLockThread.run(TestLockThread.java:39)
