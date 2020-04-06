@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: rocketmq-consume
+
+rocketmq:
+  name-server: localhost:9876
+
+# properties used in the application
+sherlocky:
+  rocketmq:
+    topic: string-topic
+    bytesRequestTopic: bytesRequestTopic
+    stringRequestTopic: stringRequestTopic
+    objectRequestTopic: objectRequestTopic
+    genericRequestTopic: genericRequestTopic
+    tag: tagA
+    bytesRequestConsumer: bytesRequestConsumer
+    stringRequestConsumer: stringRequestConsumer
+    objectRequestConsumer: objectRequestConsumer
+    genericRequestConsumer: genericRequestConsumer
+    extNameServer: 127.0.0.1:9876
+    orderTopic: order-paid-topic
+    msgExtTopic: message-ext-topic
+    transTopic: spring-transaction-topic
+    topic.user: user-topic
+
+    # another nameserver different global
+    myNameServer: 127.0.0.1:9876

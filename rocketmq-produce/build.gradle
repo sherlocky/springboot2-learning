@@ -1,0 +1,3 @@
+dependencies {
+    implementation 'org.apache.rocketmq:rocketmq-spring-boot-starter:2.1.0'
+}

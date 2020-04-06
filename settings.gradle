@@ -25,4 +25,6 @@ include 'xss'
 include 'validation'
 include 'zookeeper'
 include 'shut-down'
+include 'rocketmq-produce'
+include 'rocketmq-consume'
 
