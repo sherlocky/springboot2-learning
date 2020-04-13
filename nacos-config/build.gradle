@@ -1,0 +1,4 @@
+dependencies {
+    implementation 'com.alibaba.boot:nacos-config-spring-boot-starter:0.2.7'
+    //implementation 'com.alibaba.boot:nacos-discovery-spring-boot-starter:0.2.7'
+}
