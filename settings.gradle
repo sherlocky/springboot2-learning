@@ -27,4 +27,5 @@ include 'zookeeper'
 include 'shut-down'
 include 'rocketmq-produce'
 include 'rocketmq-consume'
+include 'nacos-config'
 
