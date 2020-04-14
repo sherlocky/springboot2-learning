@@ -26,10 +26,10 @@ gradle-wrapper.properties
 /dist/
 /nbdist/
 /.nb-gradle/
-/redis/src/main/resources/application-dev.properties
-/integration-lock/src/main/resources/application-dev.properties
 application-dev.properties
 application-dev.yml
+application-prod.properties
+application-prod.yml
 actuator/out/
 aop-logging/out/
 dubbo-api/out/
