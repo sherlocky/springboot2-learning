@@ -1,0 +1,15 @@
+repositories {
+    maven {
+        url oss_sonatype_snapshot_maven_url
+    }
+    maven {
+        url maven_url
+    }
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    compile 'com.sherlocky:sherlocky-commons:0.2.0-SNAPSHOT'
+}
