@@ -12,9 +12,11 @@ dependencies {
     implementation 'com.alibaba:fastjson:1.2.58'
 }
 
+/*
 configurations {
     // 在全局配置中排除log4j和slf4j-log4j12依赖，使用 logback
     compile.exclude group: 'log4j', module: 'log4j'
     compile.exclude group: 'org.slf4j', module: 'slf4j-log4j12'
     // all*.exclude
 }
+*/
