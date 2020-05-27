@@ -1,4 +1,4 @@
-package com.sherlocky.springboot2.redis.limiter;
+package com.sherlocky.springboot2;
 
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.IntStream;

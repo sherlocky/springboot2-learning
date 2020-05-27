@@ -26,12 +26,12 @@ public @interface Limiter {
     String prefix() default "";
 
     /**
-     * 给定的时间范围 单位(秒)
+     * 请求限制时间段 - 给定的时间范围 单位(秒)
      */
     int period();
 
     /**
-     * 一定时间内最多访问次数
+     * 一定时间内最多访问次数（在period这个时间段内允许放行请求的次数）
      */
     int count();
 

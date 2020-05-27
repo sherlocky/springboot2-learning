@@ -41,7 +41,7 @@ public class LimitInterceptor {
      * @description 切面
      */
     @Around("execution(public * *(..)) && @annotation(com.sherlocky.springboot2.redis.limiter.Limiter)")
-    public Object interceptor(ProceedingJoinPoint pjp) {
+    public Object interceptor(ProceedingJoinPoint pjp) throws Throwable {
         MethodSignature signature = (MethodSignature) pjp.getSignature();
         Method method = signature.getMethod();
         Limiter limitAnnotation = method.getAnnotation(Limiter.class);
@@ -66,19 +66,12 @@ public class LimitInterceptor {
         }
 
         ImmutableList<String> keys = ImmutableList.of(StringUtils.join(limitAnnotation.prefix(), key));
-        try {
-            Number count = limitRedisTemplate.execute(redisRequestRateLimiterScript, keys, limitCount, limitPeriod);
-            logger.info("Access try count is {} for name={} and key = {}", count, name, key);
-            if (count != null && count.intValue() <= limitCount) {
-                return pjp.proceed();
-            } else {
-                throw new RuntimeException("You have been dragged into the blacklist");
-            }
-        } catch (Throwable e) {
-            if (e instanceof RuntimeException) {
-                throw new RuntimeException(e.getLocalizedMessage());
-            }
-            throw new RuntimeException("server exception");
+        Number count = limitRedisTemplate.execute(redisRequestRateLimiterScript, keys, limitCount, limitPeriod);
+        logger.info("Access try count is {} for name = {} and key = {}", count, name, key);
+        if (count != null && count.intValue() <= limitCount) {
+            return pjp.proceed();
+        } else {
+            throw new LimitException("You have been dragged into the blacklist");
         }
     }
 

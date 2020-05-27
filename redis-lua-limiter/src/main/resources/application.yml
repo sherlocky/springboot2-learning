@@ -1,4 +1,6 @@
 spring:
+  profiles:
+    active: dev
   redis:
     database: 2
     host: localhost
