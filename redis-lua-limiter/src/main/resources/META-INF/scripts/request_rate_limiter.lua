@@ -1,3 +1,4 @@
+-- springcloud 中的 限流 lua脚本
 local tokens_key = KEYS[1]
 local timestamp_key = KEYS[2]
 --redis.log(redis.LOG_WARNING, "tokens_key " .. tokens_key)
