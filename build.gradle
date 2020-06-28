@@ -50,6 +50,8 @@ subprojects {
         // 如果你是一个lib库的维护者，对于所有需要公开的 API 你应该使用 api 依赖配置，测试依赖或不让最终用户使用的依赖使用 implementation 依赖配置
 
         implementation('org.springframework.boot:spring-boot-starter')
+        // 注解配置处理器
+        annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
         //implementation('org.springframework.boot:spring-boot-starter-web')
         /** 各子module自行配置
         // Springboot 2.1 webflux 默认使用 reactor-netty
