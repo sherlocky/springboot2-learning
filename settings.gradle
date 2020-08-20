@@ -29,4 +29,4 @@ include 'rocketmq-produce'
 include 'rocketmq-consume'
 include 'nacos-config'
 include 'redis-lua-limiter'
-
+include 'TestNG'

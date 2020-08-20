@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Sherlock单元测试" parallel="classes" thread-count="5">
+
+    <listeners>
+        <listener class-name="com.sherlocky.springboot2.testng.listener.ExtentTestNGIReporterListener"/>
+    </listeners>
+
+    <test verbose="1" preserve-order="true" name="Sherlock测试">
+        <!-- 在不指定group时，会执行所有测试方法。
+                verbose  ： 控制台输出的详细内容等级,0-10级（0无，10最详细）
+                preserve-order ：是否按照排序执行 默认为true
+                name ： 必选项，<suite>的名字，将出现在reports里
+          -->
+
+        <!--这里参数声明对于整个测试suite都有效-->
+        <parameter name="userId" value="1"/>
+        <parameter name="userName" value="Sherlock1"/>
+        <groups>
+            <define name="before" >
+                <include name="before"/>
+            </define>
+            <define name="one" >
+                <include name="one"/>
+            </define>
+            <define name="two" >
+                <include name="two"/>
+            </define>
+            <define name="oneAndTwo" >
+                <include name="one"/>
+                <include name="two"/>
+            </define>
+            <run>
+                <include name="before"/>
+                <include name="two"/>
+                <!--<include name="one"/>-->
+                <include name="oneAndTwo"/>
+                <!--run标签可以只存在include/exclude
+                    对于测试类而言，如果只存在exclude则除了exclude的方法其他类中存在的都会执行。
+                    存在include则只执行include包含的-->
+            </run>
+        </groups>
+
+        <classes>
+            <class name="com.sherlocky.springboot2.testng.SherlockTest"/>
+            <!--此处声明的参数的值优先级更高 仅对这个类有效-->
+            <!--<parameter name="xxx" value="yyy"/>-->
+        </classes>
+    </test>
+</suite>
+

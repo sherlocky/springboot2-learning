@@ -1,0 +1,11 @@
+dependencies {
+    implementation 'com.alibaba:fastjson:1.2.70'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.testng:testng:7.1.0'
+    testImplementation 'com.aventstack:extentreports:3.0.6'
+}
+
+configurations {
+    testImplementation.exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+}
